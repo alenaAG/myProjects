@@ -12,7 +12,7 @@ public class Genre {
 		this.id=id;
 		}
     public String getGenreName(){
-		return songName;
+		return genreName;
 		}
 	public void setGenreName(String genreName){
 		this.genreName=genreName;
