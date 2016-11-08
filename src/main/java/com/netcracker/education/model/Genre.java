@@ -1,3 +1,5 @@
+package com.netcracker.education.model;
+
 import java.util.List;
 
 public class Genre {
