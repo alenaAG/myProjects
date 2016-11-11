@@ -12,14 +12,14 @@ public class Track {
     private final static int DEFAULT_ID=-1;
     private final static String DEFAULT_SONG_NAME="default";
     private final static String DEFAULT_ALBUM="default";
-    private final static List DEAFAULT_GENRE_LIST= new ArrayList();
+    private final static List<Genre> DEAFAULT_GENRE_LIST= new ArrayList();
     private final static Duration DEFAULT_LENGTH=ZERO;
     private int id;
     private String songName;
     private String artist;
     private String album;
     private Duration length;
-    private List genreList;
+    private List<Genre> genreList;
     public Track(){
         this.id=DEFAULT_ID;this.album=DEFAULT_ALBUM;
         this.artist=DEFAULT_ARTIST;
@@ -49,11 +49,22 @@ public class Track {
     public String getArtist(){return artist;}
     public String getAlbum(){return album;}
     public Duration getLength(){return length;}
-    public List getGenreList(){return genreList;}
+    public List<Genre> getGenreList(){return genreList;}
     public void setId(int id){this.id=id;}
     public void setSongName(String songName){this.songName=songName;}
     public void setArtist(String artist){this.album=album;}
     public void setLength(Duration length){this.length=length;}
     public void setAlbum(String Album){this.album=album;}
-    public void setGenreList(List genreList){this.genreList=genreList;}
+    public void setGenreList(List<Genre> genreList){this.genreList=genreList;}
+    @Override
+    public String toString()
+    {
+        String s;
+        s="ID: "+this.getId()+" SONGNAME: "+this.getSongName()+" ARTIST: "+this.getArtist()+" ALBUM: "+ this.getAlbum()+" LENGTH: "+this.getLength().toString()+" GENRES: ";
+        for(Genre genre:this.genreList)
+        { 
+            s+=genre.getGenreName();
+        }
+        return s;
+    }
 }
