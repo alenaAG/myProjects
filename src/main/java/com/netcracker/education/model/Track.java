@@ -26,7 +26,7 @@ public class Track {
         this.length=DEFAULT_LENGTH;
         this.genreList=DEAFAULT_GENRE_LIST;
     };
-    public Track(String name,String artist, String album,Duration length, List genreList)
+    public Track(String songName,String artist, String album,Duration length, List genreList)
     {
         this.album=album;
         this.artist=artist;
@@ -35,7 +35,7 @@ public class Track {
         this.genreList=genreList;
         this.id=DEFAULT_ID;
     }
-    public Track(int id,String name,String artist, String album,Duration length, List genreList)
+    public Track(int id,String songName,String artist, String album,Duration length, List genreList)
     {
         this.album=album;
         this.artist=artist;
@@ -56,6 +56,8 @@ public class Track {
     public void setLength(Duration length){this.length=length;}
     public void setAlbum(String Album){this.album=album;}
     public void setGenreList(List<Genre> genreList){this.genreList=genreList;}
+    public void addGenre(Genre genre){this.genreList.add(genre);}
+    public void delGenre(Genre genre){if (this.genreList.contains(genre)) genreList.remove(genre);} //написать исключение 
     @Override
     public String toString()
     {
@@ -63,7 +65,7 @@ public class Track {
         s="ID: "+this.getId()+" SONGNAME: "+this.getSongName()+" ARTIST: "+this.getArtist()+" ALBUM: "+ this.getAlbum()+" LENGTH: "+this.getLength().toString()+" GENRES: ";
         for(Genre genre:this.genreList)
         { 
-            s+=genre.getGenreName();
+            s+=genre.getGenreName()+" ";
         }
         return s;
     }

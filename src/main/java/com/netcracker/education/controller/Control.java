@@ -10,59 +10,68 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 public class Control {
-    public static List<Track> trackList=new ArrayList();
-    public static List<Genre> genreList=new ArrayList();
-    public static void editTrack(Track track,String songName,String artist, String album,Duration length)
+    private List<Track> trackList=new ArrayList();
+    private List<Genre> genreList=new ArrayList();
+    public Control(List<Track> trackList,List<Genre> genreList)
     {
-        track.setSongName(songName);
-        track.setArtist(artist);
-        track.setLength(length);
-        track.setAlbum(album);
+        this.trackList=trackList;
+        this.genreList=genreList;
     }
-    public static void addTrack(List<Track> trackList,Track track)
+    public List<Track> TrackList()
+    {return trackList;}
+    public List<Genre> GenreList()
+    {return genreList;}
+    public void editTrack(int index,String songName,String artist, String album,Duration length,List<Genre> genreList) 
     {
-        int index=trackList.size();
-        trackList.add(index, track);
-        track.setId(index);
-        trackList.add(track);
+        TrackList().get(index).setSongName(songName);
+        TrackList().get(index).setArtist(artist);
+        TrackList().get(index).setLength(length);
+        TrackList().get(index).setAlbum(album);
+        TrackList().get(index).setGenreList(genreList);
     }
-    public static void delTrack(Track track)
+    public void addTrack(String songName,String artist, String album,Duration length,List<Genre> genreList)
     {
-        trackList.remove(track);
-        for (Genre genre :genreList)
+        try
         {
-            if(genre.getTrackList().contains(track))genre.getTrackList().remove(track);
+            int id=0;
+        Track track=new Track(id,songName,artist,album,length,genreList);
+        if(TrackList().contains(track)) throw new AlreadyExistsException();
+        if(TrackList().isEmpty())id=1; else id=TrackList().get(TrackList().size()-1).getId()+1;
+        track.setId(id);
+        TrackList().add(track);
         }
+        catch(AlreadyExistsException e){System.err.println(e.getMessage());}
+        
     }
-    
-    public static void addGenre(Track track, Genre genre)
+    public void delTrack(Track track)
     {
-        track.getGenreList().add(genre);
-        genre.getTrackList().add(track);
-    }
-    public static void delGenre(Track track, Genre genre)
+        TrackList().remove(track);
+    }    
+    public void addGenre(Genre genre) 
     {
-        if(track.getGenreList().contains(genre)) track.getGenreList().remove(genre);
+        try
+        {int id=0;
+        if (GenreList().isEmpty())id =1; else id=GenreList().get(GenreList().size()-1).getId()+1;
+        
+        if(GenreList().contains(genre))throw new AlreadyExistsException();
+        else 
+        {
+            this.GenreList().add(genre);genre.setId(id);
+        }
+        }
+        catch(AlreadyExistsException e){System.err.println(e.getMessage());}
+                
     }
-    public static void setSongName(Track track, String songName)
+    public void delGenre(Genre genre)
     {
-        track.setSongName(songName);
-    }
-    public static void setArtist(Track track, String artist)
+        if(GenreList().contains(genre)) 
+        {
+            GenreList().remove(genre);
+            for(Track track:TrackList()) if (track.getGenreList().contains(genre))track.getGenreList().remove(genre);
+        }
+    }  
+    public void addGenreToTrack(int trackIndex, int genreIndex)
     {
-        track.setArtist(artist);
+        TrackList().get(trackIndex).addGenre(GenreList().get(genreIndex));
     }
-    public static void setAkbum(Track track, String album)
-    {
-        track.setAlbum(album);
-    }
-    public static void setLength(Track track, Duration length)
-    {
-        track.setLength(length);
-    }
-    public static void setGenreName(Genre genre, String name)
-    {
-        genre.setGenreName(name);
-    }
-    
 }
