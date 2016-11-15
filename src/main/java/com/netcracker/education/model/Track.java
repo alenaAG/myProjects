@@ -59,6 +59,18 @@ public class Track {
     public void addGenre(Genre genre){this.genreList.add(genre);}
     public void delGenre(Genre genre){if (this.genreList.contains(genre)) genreList.remove(genre);} //написать исключение 
     @Override
+        public boolean equals(Object object)
+        {
+            if (this.getClass()!=object.getClass()) return false;
+            Track track=(Track)object;
+            if (this.getSongName()!=track.getSongName()) return false;
+            if (this.getArtist()!=track.getArtist()) return false;
+            if (this.getAlbum()!=track.getAlbum()) return false;
+            if (this.getGenreList()!=track.getGenreList()) return false;
+            if (this.getLength()!=track.getLength()) return false;
+            return true;
+        }
+    @Override
     public String toString()
     {
         String s;

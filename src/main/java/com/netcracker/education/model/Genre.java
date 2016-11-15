@@ -33,7 +33,14 @@ public class Genre {
 	public void setGenreName(String genreName){
 		this.genreName=genreName;
 		}
-   	
+   	@Override
+        public boolean equals(Object object)
+        {
+            if (this.getClass()!=object.getClass()) return false;
+            Genre genre=(Genre)object;
+            if (this.getGenreName()==genre.getGenreName()) return true;
+            return false;
+        }
         @Override
         public String toString()
         {

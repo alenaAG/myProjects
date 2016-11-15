@@ -47,16 +47,21 @@ public class Control {
     {
         TrackList().remove(track);
     }    
-    public void addGenre(Genre genre) 
+    public void addGenre(String s) 
     {
         try
-        {int id=0;
-        if (GenreList().isEmpty())id =1; else id=GenreList().get(GenreList().size()-1).getId()+1;
-        
+        {
+            Genre genre=new Genre(s);
+            int id=0;
+        if (GenreList().isEmpty()){id =1; genre.setId(id);GenreList().add(genre);}
+        else
+        {
         if(GenreList().contains(genre))throw new AlreadyExistsException();
         else 
         {
+            id=GenreList().get(GenreList().size()-1).getId()+1;
             this.GenreList().add(genre);genre.setId(id);
+        }
         }
         }
         catch(AlreadyExistsException e){System.err.println(e.getMessage());}
