@@ -6,8 +6,10 @@
 package com.netcracker.education.controller;
 
 import com.netcracker.education.model.*;
+import com.netcracker.education.model.Track;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 public class Control {
     private List<Track> trackList=new ArrayList();
@@ -28,6 +30,20 @@ public class Control {
         TrackList().get(index).setLength(length);
         TrackList().get(index).setAlbum(album);
         TrackList().get(index).setGenreList(genreList);
+    }
+    public void addTrack(String songName,String artist, String album,Duration length)
+    {
+        try
+        {
+            int id=0;
+        Track track=new Track(id,songName,artist,album,length);
+        if(TrackList().contains(track)) throw new AlreadyExistsException();
+        if(TrackList().isEmpty())id=1; else id=TrackList().get(TrackList().size()-1).getId()+1;
+        track.setId(id);
+        TrackList().add(track);
+        }
+        catch(AlreadyExistsException e){System.err.println(e.getMessage());}
+        
     }
     public void addTrack(String songName,String artist, String album,Duration length,List<Genre> genreList)
     {
@@ -79,4 +95,22 @@ public class Control {
     {
         TrackList().get(trackIndex).addGenre(GenreList().get(genreIndex));
     }
+    
+    public void sortBySongName()
+    {
+        Collections.sort(TrackList(), new Track.TracksBySongNameComparator());
+    }
+    public void sortByArtist()
+    {
+        Collections.sort(TrackList(),new Track.TracksByArtistComparator());
+    }
+    public void sortByLength()
+    {
+        Collections.sort(TrackList(), new Track.TracksByLengthComparator());
+    }
+    public void sortByAlbum()
+    {
+        Collections.sort(TrackList(), new Track.TracksByAlbumComparator());
+    }
+    
 }

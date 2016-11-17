@@ -28,8 +28,25 @@ public class App
              controller.addGenre("Ambient");
              controller.addTrack("In NY","JAY-Z","NY", duration, genreListTR1);
              controller.addGenreToTrack(0, 1);
+             controller.addTrack("Too Good", "Drake", "Good", duration, genreListTR1);
+             controller.addTrack("Fine","Drake","Good",duration);
+             controller.addTrack("Damn","Damn","Bad",duration);
        
         System.out.println(controller.GenreList().toString());
         System.out.println(controller.TrackList().toString());
+        System.out.println("Sort By SongName:");
+        controller.sortBySongName();
+        System.out.println(controller.TrackList().toString());
+        System.out.println("Sort By Artist:");
+        controller.sortByArtist();
+        System.out.println(controller.TrackList().toString());
+        System.out.println("Sort By Album:");
+        controller.sortByAlbum();
+        System.out.println(controller.TrackList().toString());
+        System.out.println("Sort By Length:");
+        controller.sortByLength();
+        System.out.println(controller.TrackList().toString());
+        
+        
     }
 }

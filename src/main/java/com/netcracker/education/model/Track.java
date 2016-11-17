@@ -4,9 +4,10 @@ package com.netcracker.education.model;
 import java.time.Duration;
 import static java.time.Duration.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public class Track {
+public class Track  {
     
     private final static String DEFAULT_ARTIST="default";
     private final static int DEFAULT_ID=-1;
@@ -14,6 +15,10 @@ public class Track {
     private final static String DEFAULT_ALBUM="default";
     private final static List<Genre> DEAFAULT_GENRE_LIST= new ArrayList();
     private final static Duration DEFAULT_LENGTH=ZERO;
+
+    public static void TracksByLengthComparator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     private int id;
     private String songName;
     private String artist;
@@ -34,6 +39,24 @@ public class Track {
         this.length=length;
         this.genreList=genreList;
         this.id=DEFAULT_ID;
+    }
+    public Track(String songName,String artist, String album,Duration length)
+    {
+        this.album=album;
+        this.artist=artist;
+        this.songName=songName;
+        this.length=length;
+        this.genreList=DEAFAULT_GENRE_LIST;
+        this.id=DEFAULT_ID;
+    }
+    public Track(int id,String songName,String artist, String album,Duration length)
+    {
+        this.album=album;
+        this.artist=artist;
+        this.songName=songName;
+        this.length=length;
+        this.genreList=DEAFAULT_GENRE_LIST;
+        this.id=id;
     }
     public Track(int id,String songName,String artist, String album,Duration length, List genreList)
     {
@@ -70,6 +93,36 @@ public class Track {
             if (this.getLength()!=track.getLength()) return false;
             return true;
         }
+    
+    public static class TracksBySongNameComparator implements Comparator<Track> {
+
+        @Override
+        public int compare(Track o1, Track o2) {
+            return o1.getSongName().compareTo(o2.getSongName());
+        }
+    }
+    public static class TracksByArtistComparator implements Comparator<Track> {
+
+        @Override
+        public int compare(Track o1, Track o2) {
+            return o1.getArtist().compareTo(o2.getArtist());
+        }
+    }
+    public static class TracksByLengthComparator implements Comparator<Track> {
+
+        @Override
+        public int compare(Track o1, Track o2) {
+            return o1.getLength().compareTo(o2.getLength());
+        }
+    }
+    public static class TracksByAlbumComparator implements Comparator<Track> {
+
+        @Override
+        public int compare(Track o1, Track o2) {
+            return o1.getAlbum().compareTo(o2.getAlbum());
+        }
+    }
+    
     @Override
     public String toString()
     {
