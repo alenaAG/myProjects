@@ -1,6 +1,7 @@
 
 package com.netcracker.education.model;
 
+import com.netcracker.education.controller.AlreadyExistsException;
 import java.time.Duration;
 import static java.time.Duration.*;
 import java.util.ArrayList;
@@ -33,6 +34,9 @@ public class Track  {
     };
     public Track(String songName,String artist, String album,Duration length, List genreList)
     {
+        if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
+        if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");
+        if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect Album");
         this.album=album;
         this.artist=artist;
         this.songName=songName;
@@ -42,6 +46,10 @@ public class Track  {
     }
     public Track(String songName,String artist, String album,Duration length)
     {
+        
+        if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
+        if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");
+        if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect Album");
         this.album=album;
         this.artist=artist;
         this.songName=songName;
@@ -51,6 +59,10 @@ public class Track  {
     }
     public Track(int id,String songName,String artist, String album,Duration length)
     {
+        
+        if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
+        if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");
+        if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect Album");
         this.album=album;
         this.artist=artist;
         this.songName=songName;
@@ -60,6 +72,10 @@ public class Track  {
     }
     public Track(int id,String songName,String artist, String album,Duration length, List genreList)
     {
+        
+        if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
+        if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");
+        if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect Album");
         this.album=album;
         this.artist=artist;
         this.songName=songName;
@@ -74,12 +90,15 @@ public class Track  {
     public Duration getLength(){return length;}
     public List<Genre> getGenreList(){return genreList;}
     public void setId(int id){this.id=id;}
-    public void setSongName(String songName){this.songName=songName;}
-    public void setArtist(String artist){this.album=album;}
+    public void setSongName(String songName){if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");this.songName=songName;}
+    public void setArtist(String artist){if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");this.album=album;}
     public void setLength(Duration length){this.length=length;}
-    public void setAlbum(String Album){this.album=album;}
-    public void setGenreList(List<Genre> genreList){this.genreList=genreList;}
-    public void addGenre(Genre genre){this.genreList.add(genre);}
+    public void setAlbum(String album){if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect AlbumName");this.album=album;}
+    public void setGenreList(List<Genre> genreList){  this.genreList=genreList;}
+    public void addGenre(Genre genre) throws AlreadyExistsException{
+        if (this.getGenreList().contains(this.getGenreList().contains(genre))) throw new AlreadyExistsException("Track already has this genre!");
+        this.genreList.add(genre);
+    }
     public void delGenre(Genre genre){if (this.genreList.contains(genre)) genreList.remove(genre);} //написать исключение 
     @Override
         public boolean equals(Object object)
@@ -122,7 +141,14 @@ public class Track  {
             return o1.getAlbum().compareTo(o2.getAlbum());
         }
     }
-    
+    private static boolean validateString(String s)
+    {
+        boolean b=true;
+        if (s.charAt(0)==' ') return false;
+        if (s.charAt(0)=='.') return false;
+        if (s.charAt(0)==',') return false;
+        return b;
+    }
     @Override
     public String toString()
     {
@@ -132,6 +158,7 @@ public class Track  {
         { 
             s+=genre.getGenreName()+" ";
         }
+        s+="\n";
         return s;
     }
 }

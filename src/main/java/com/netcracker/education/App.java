@@ -19,6 +19,7 @@ public class App
         ArrayList<Genre> genreList=new ArrayList();
         ArrayList<Track> trackList=new ArrayList();
         ArrayList<Genre> genreListTR1=new ArrayList<Genre>();
+        ArrayList<Genre> genreListTR2=new ArrayList<Genre>();
         Control controller=new Control(trackList,genreList);
         Duration duration = Duration.parse("PT20.345S");
              controller.addGenre("Pop");  
@@ -28,9 +29,15 @@ public class App
              controller.addGenre("Ambient");
              controller.addTrack("In NY","JAY-Z","NY", duration, genreListTR1);
              controller.addGenreToTrack(0, 1);
-             controller.addTrack("Too Good", "Drake", "Good", duration, genreListTR1);
+             controller.addTrack("Too Good", "Drake", "Good", duration, genreListTR2);
+             controller.addGenreToTrack(1, 1);
              controller.addTrack("Fine","Drake","Good",duration);
              controller.addTrack("Damn","Damn","Bad",duration);
+             controller.addTrack("Anapa","YOYO","Anapa",duration);
+             controller.addTrack(" ", " ", " ", duration);
+             controller.addGenreToTrack(0, 1);
+             controller.addGenreToTrack(0, 0);
+            controller.delGenre("Pop");
        
         System.out.println(controller.GenreList().toString());
         System.out.println(controller.TrackList().toString());

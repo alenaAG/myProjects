@@ -25,11 +25,16 @@ public class Control {
     {return genreList;}
     public void editTrack(int index,String songName,String artist, String album,Duration length,List<Genre> genreList) 
     {
+        try{
         TrackList().get(index).setSongName(songName);
         TrackList().get(index).setArtist(artist);
         TrackList().get(index).setLength(length);
         TrackList().get(index).setAlbum(album);
         TrackList().get(index).setGenreList(genreList);
+        if(TrackList().contains(TrackList().get(index))) throw new AlreadyExistsException("Track already exists!");
+        }
+        catch (IllegalArgumentException e){System.err.println(e.getMessage());}
+        catch(AlreadyExistsException e){System.err.println(e.getMessage());}
     }
     public void addTrack(String songName,String artist, String album,Duration length)
     {
@@ -37,26 +42,30 @@ public class Control {
         {
             int id=0;
         Track track=new Track(id,songName,artist,album,length);
-        if(TrackList().contains(track)) throw new AlreadyExistsException();
+        if(TrackList().contains(track)) throw new AlreadyExistsException("Track already exists!");
         if(TrackList().isEmpty())id=1; else id=TrackList().get(TrackList().size()-1).getId()+1;
         track.setId(id);
         TrackList().add(track);
         }
         catch(AlreadyExistsException e){System.err.println(e.getMessage());}
+        catch (IllegalArgumentException e){System.err.println(e.getMessage());}
         
     }
     public void addTrack(String songName,String artist, String album,Duration length,List<Genre> genreList)
     {
         try
-        {
-            int id=0;
+        {  
+        int id=0;
         Track track=new Track(id,songName,artist,album,length,genreList);
-        if(TrackList().contains(track)) throw new AlreadyExistsException();
+        if(TrackList().contains(track)) throw new AlreadyExistsException("Track already exists!");
         if(TrackList().isEmpty())id=1; else id=TrackList().get(TrackList().size()-1).getId()+1;
         track.setId(id);
         TrackList().add(track);
         }
+        catch (IllegalArgumentException e){System.err.println(e.getMessage());}
         catch(AlreadyExistsException e){System.err.println(e.getMessage());}
+        
+        
         
     }
     public void delTrack(Track track)
@@ -72,7 +81,7 @@ public class Control {
         if (GenreList().isEmpty()){id =1; genre.setId(id);GenreList().add(genre);}
         else
         {
-        if(GenreList().contains(genre))throw new AlreadyExistsException();
+        if(GenreList().contains(genre))throw new AlreadyExistsException("Genre alredy exists");
         else 
         {
             id=GenreList().get(GenreList().size()-1).getId()+1;
@@ -80,6 +89,7 @@ public class Control {
         }
         }
         }
+        catch (IllegalArgumentException e){System.err.println(e.getMessage());}
         catch(AlreadyExistsException e){System.err.println(e.getMessage());}
                 
     }
@@ -90,10 +100,23 @@ public class Control {
             GenreList().remove(genre);
             for(Track track:TrackList()) if (track.getGenreList().contains(genre))track.getGenreList().remove(genre);
         }
-    }  
+    } 
+    public void delGenre(String genreS)
+    {
+        Genre genre= new Genre(genreS);
+        if(GenreList().contains(genre)) 
+        {
+            GenreList().remove(genre);
+            for(Track track:TrackList()) if (track.getGenreList().contains(genre))track.getGenreList().remove(genre);
+        }
+    } 
     public void addGenreToTrack(int trackIndex, int genreIndex)
     {
+        try{
+        if (TrackList().get(trackIndex).getGenreList().contains(GenreList().get(genreIndex))) throw new AlreadyExistsException("Track alreadi has this genre!");
         TrackList().get(trackIndex).addGenre(GenreList().get(genreIndex));
+        }
+        catch(AlreadyExistsException e){System.err.println(e.getMessage());}
     }
     
     public void sortBySongName()

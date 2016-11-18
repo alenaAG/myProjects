@@ -12,12 +12,14 @@ public class Genre {
         public Genre(){this.id=DEFAULT_ID;this.genreName=DEFAULT_NAME;}
 	public Genre(int id, String name, List<Track> trackList)
          {
+             if (!Genre.validateString(name)) throw new IllegalArgumentException("Incorect GenreName");
              this.id=id;
              this.genreName=name;
              this.trackList=trackList;
          }
         public Genre(String name)
          {
+             if (!Genre.validateString(name)) throw new IllegalArgumentException("Incorect GenreName");
              this.id=DEFAULT_ID;
              this.genreName=name;
          }
@@ -31,8 +33,17 @@ public class Genre {
 		return genreName;
 		}
 	public void setGenreName(String genreName){
+                if (!Genre.validateString(genreName)) throw new IllegalArgumentException("Incorect GenreName");
 		this.genreName=genreName;
 		}
+        private static boolean validateString(String s)
+        {
+        boolean b=true;
+        if (s.charAt(0)==' ') return false;
+        if (s.charAt(0)=='.') return false;
+        if (s.charAt(0)==',') return false;
+        return b;
+        }
    	@Override
         public boolean equals(Object object)
         {
