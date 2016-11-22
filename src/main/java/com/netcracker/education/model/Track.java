@@ -144,7 +144,9 @@ public class Track  {
     private static boolean validateString(String s)
     {
         boolean b=true;
-        if (s.charAt(0)==' ') return false;
+        if (s==null) return false;
+        if (s.trim().equals("")) return false;
+        //if (s.charAt(0)==' ') return false;
         if (s.charAt(0)=='.') return false;
         if (s.charAt(0)==',') return false;
         return b;

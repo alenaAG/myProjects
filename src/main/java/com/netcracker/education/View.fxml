@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.netcracker.education.controller.Control">
+   <children>
+      <SplitPane dividerPositions="0.5" layoutX="99.0" layoutY="93.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="576.0">
+               <children>
+                  <TableView prefHeight="500.0" prefWidth="550.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn prefWidth="108.0" text="Song" />
+                      <TableColumn prefWidth="84.0" text="Artist" />
+                        <TableColumn prefWidth="115.0" text="Album" />
+                        <TableColumn prefWidth="77.0" text="Length" />
+                        <TableColumn prefWidth="165.0" text="Genres" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="421.0" prefWidth="220.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="191.0" text="Song" AnchorPane.bottomAnchor="557.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="14.0" />
+                  <Label layoutX="15.0" layoutY="41.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Label layoutX="14.0" layoutY="68.0" prefHeight="27.0" prefWidth="191.0" text="Artist" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Label layoutX="15.0" layoutY="122.0" prefHeight="27.0" prefWidth="191.0" text="Album" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Label layoutX="15.0" layoutY="95.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Label layoutX="15.0" layoutY="176.0" prefHeight="27.0" prefWidth="191.0" text="Length" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Label layoutX="14.0" layoutY="149.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Label layoutX="15.0" layoutY="203.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Accordion layoutX="10.0" layoutY="264.0" />
+                <TitledPane animated="false" layoutX="9.0" layoutY="230.0" text="Genres" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="9.0">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+                  <HBox layoutX="15.0" layoutY="553.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0">
+                     <children>
+                        <Button layoutX="15.0" layoutY="553.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="65.0" text="Add" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
+                        <Button layoutX="80.0" layoutY="553.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="65.0" text="Edit" AnchorPane.bottomAnchor="14.0" />
+                        <Button layoutX="145.0" layoutY="553.0" mnemonicParsing="false" text="Delete" AnchorPane.bottomAnchor="14.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
