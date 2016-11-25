@@ -49,7 +49,7 @@ public class View extends Application {
     public void initRootLayout(){
         try{
         FXMLLoader loader=new FXMLLoader();
-        loader.setLocation(View.class.getResource("../RootLayout.fxml"));
+        loader.setLocation(View.class.getResource("RootLayout.fxml"));
         rootLayout=(BorderPane)loader.load();
         Scene scene =new Scene(rootLayout);
         primaryStage.setScene(scene);
@@ -61,7 +61,7 @@ public class View extends Application {
     public void showTrackLibrary(){
         try{
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(View.class.getResource("../View.fxml"));
+        loader.setLocation(View.class.getResource("View.fxml"));
         AnchorPane trackLibrary=(AnchorPane)loader.load();
         rootLayout.setCenter(trackLibrary);
         ViewController viewController = loader.getController();

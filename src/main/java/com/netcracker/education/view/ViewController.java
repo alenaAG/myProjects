@@ -36,6 +36,9 @@ public class ViewController {
     
     private View view;
     
+    public ViewController()
+    {}
+    
     public ViewController(View view)
     {}
     
