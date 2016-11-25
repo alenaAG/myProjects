@@ -1,4 +1,4 @@
-package com.netcracker.education;
+package com.netcracker.education.view;
 
 import com.netcracker.education.model.Genre;
 import com.netcracker.education.model.Track;

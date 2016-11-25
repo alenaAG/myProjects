@@ -5,8 +5,12 @@ import com.netcracker.education.controller.AlreadyExistsException;
 import java.time.Duration;
 import static java.time.Duration.*;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.Comparator;
 import java.util.List;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Track  {
     
@@ -20,29 +24,32 @@ public class Track  {
     public static void TracksByLengthComparator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    private int id;
-    private String songName;
-    private String artist;
-    private String album;
-    private Duration length;
-    private List<Genre> genreList;
+    private IntegerProperty id;
+    private StringProperty songName;
+    private StringProperty artist;
+    private StringProperty album;
+    private ObjectProperty<Duration> length;
+    private ObservableList<Genre> genreList;
     public Track(){
-        this.id=DEFAULT_ID;this.album=DEFAULT_ALBUM;
-        this.artist=DEFAULT_ARTIST;
-        this.length=DEFAULT_LENGTH;
-        this.genreList=DEAFAULT_GENRE_LIST;
+        this.id=new SimpleIntegerProperty(DEFAULT_ID);
+        this.album=new SimpleStringProperty(DEFAULT_ALBUM);
+        this.artist=new SimpleStringProperty(DEFAULT_ARTIST);
+        this.length=new SimpleObjectProperty<Duration>(DEFAULT_LENGTH);
+        ObservableList<Genre> observableList = FXCollections.observableList(DEAFAULT_GENRE_LIST);
+        this.genreList= observableList;
     };
     public Track(String songName,String artist, String album,Duration length, List genreList)
     {
         if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
         if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");
         if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect Album");
-        this.album=album;
-        this.artist=artist;
-        this.songName=songName;
-        this.length=length;
-        this.genreList=genreList;
-        this.id=DEFAULT_ID;
+        this.album=new SimpleStringProperty(album);
+        this.artist=new SimpleStringProperty(artist);
+        this.songName=new SimpleStringProperty(songName);
+        this.length=new SimpleObjectProperty<Duration>(length);
+        ObservableList<Genre> observableList = FXCollections.observableList(genreList);
+        this.genreList= observableList;
+        this.id=new SimpleIntegerProperty(DEFAULT_ID);
     }
     public Track(String songName,String artist, String album,Duration length)
     {
@@ -50,12 +57,13 @@ public class Track  {
         if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
         if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");
         if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect Album");
-        this.album=album;
-        this.artist=artist;
-        this.songName=songName;
-        this.length=length;
-        this.genreList=DEAFAULT_GENRE_LIST;
-        this.id=DEFAULT_ID;
+        this.album=new SimpleStringProperty(album);
+        this.artist=new SimpleStringProperty(artist);
+        this.songName=new SimpleStringProperty(songName);
+        this.length=new SimpleObjectProperty<Duration>(length);
+        ObservableList<Genre> observableList = FXCollections.observableList(DEAFAULT_GENRE_LIST);
+        this.genreList= observableList;
+        this.id=new SimpleIntegerProperty(DEFAULT_ID);
     }
     public Track(int id,String songName,String artist, String album,Duration length)
     {
@@ -63,12 +71,13 @@ public class Track  {
         if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
         if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");
         if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect Album");
-        this.album=album;
-        this.artist=artist;
-        this.songName=songName;
-        this.length=length;
-        this.genreList=DEAFAULT_GENRE_LIST;
-        this.id=id;
+        this.album=new SimpleStringProperty(album);
+        this.artist=new SimpleStringProperty(artist);
+        this.songName=new SimpleStringProperty(songName);
+        this.length=new SimpleObjectProperty<Duration>(length);
+        ObservableList<Genre> observableList = FXCollections.observableList(DEAFAULT_GENRE_LIST);
+        this.genreList= observableList;
+        this.id=new SimpleIntegerProperty(id);
     }
     public Track(int id,String songName,String artist, String album,Duration length, List genreList)
     {
@@ -76,25 +85,35 @@ public class Track  {
         if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
         if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");
         if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect Album");
-        this.album=album;
-        this.artist=artist;
-        this.songName=songName;
-        this.length=length;
-        this.genreList=genreList;
-        this.id=id;
+        this.album=new SimpleStringProperty(album);
+        this.artist=new SimpleStringProperty(artist);
+        this.songName=new SimpleStringProperty(songName);
+        this.length=new SimpleObjectProperty<Duration>(length);
+        ObservableList<Genre> observableList = FXCollections.observableList(genreList);
+        this.genreList= observableList;
+        this.id=new SimpleIntegerProperty(id);
     }
-    public int getId(){return id;}
-    public String getSongName(){return songName;}
-    public String getArtist(){return artist;}
-    public String getAlbum(){return album;}
-    public Duration getLength(){return length;}
+    public int getId(){return id.get();}
+    public IntegerProperty getIdProperty(){return id;}
+    public String getSongName(){return songName.get();}
+    public StringProperty getSongNameProperty(){return songName;}
+    public String getArtist(){return artist.get();}
+    public StringProperty getArtistProperty(){return artist;}
+    public String getAlbum(){return album.get();}
+    public StringProperty getAlbumProperty(){return album;}
+    public ObjectProperty<Duration> getLengthProperty(){return length;}
+    public Duration getLength(){return length.get();}
     public List<Genre> getGenreList(){return genreList;}
-    public void setId(int id){this.id=id;}
-    public void setSongName(String songName){if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");this.songName=songName;}
-    public void setArtist(String artist){if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");this.album=album;}
-    public void setLength(Duration length){this.length=length;}
-    public void setAlbum(String album){if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect AlbumName");this.album=album;}
-    public void setGenreList(List<Genre> genreList){  this.genreList=genreList;}
+    public ObservableList<Genre> getGenreListProperty(){return genreList;}
+    public void setId(int id){this.id.set(id);}
+    public void setSongName(String songName){if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");this.songName.set(songName);}
+    public void setArtist(String artist){if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");this.artist.set(artist);}
+    public void setLength(Duration length){this.length.setValue(length);}
+    public void setAlbum(String album){if (!Track.validateString(album)) throw new IllegalArgumentException("Incorrect AlbumName");this.album.set(album);}
+    public void setGenreList(List<Genre> genreList){   
+        ObservableList<Genre> observableList = FXCollections.observableList(genreList);
+        this.genreList= observableList;
+    }
     public void addGenre(Genre genre) throws AlreadyExistsException{
         if (this.getGenreList().contains(this.getGenreList().contains(genre))) throw new AlreadyExistsException("Track already has this genre!");
         this.genreList.add(genre);
