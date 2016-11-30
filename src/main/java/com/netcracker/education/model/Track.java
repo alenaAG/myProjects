@@ -160,7 +160,7 @@ public class Track  {
             return o1.getAlbum().compareTo(o2.getAlbum());
         }
     }
-    private static boolean validateString(String s)
+    public static boolean validateString(String s)
     {
         boolean b=true;
         if (s==null) return false;
