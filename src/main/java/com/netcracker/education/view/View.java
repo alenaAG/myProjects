@@ -7,6 +7,8 @@ package com.netcracker.education.view;
  */
 
 
+import com.netcracker.education.ViewController;
+import com.netcracker.education.ViewController;
 import com.netcracker.education.controller.Control;
 import com.netcracker.education.model.Genre;
 import com.netcracker.education.model.Track;
@@ -34,6 +36,7 @@ import javafx.stage.Stage;
 public class View extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private AnchorPane centerLayout;
     
     private ObservableList<Track> trackList = FXCollections.observableArrayList();
     private ObservableList<Genre> genreList=FXCollections.observableArrayList();
@@ -41,7 +44,6 @@ public class View extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage=primaryStage;
         this.primaryStage.setTitle("MUSIC LIBTRARY");
-        
         initRootLayout();
         showTrackLibrary();
     }
@@ -59,16 +61,21 @@ public class View extends Application {
         
     }
     public void showTrackLibrary(){
+        
+        
         try{
-        FXMLLoader loader = new FXMLLoader();
+            FXMLLoader loader = new FXMLLoader();
         loader.setLocation(View.class.getResource("../View.fxml"));
-        AnchorPane trackLibrary=(AnchorPane)loader.load();
+        //.setRoot(this);
+        AnchorPane trackLibrary;
+        trackLibrary = (AnchorPane) loader.load();
         rootLayout.setCenter(trackLibrary);
         ViewController viewController = loader.getController();
         viewController.setView(this);
-        
         }
-        catch(IOException e){e.printStackTrace();}
+        catch(IOException f){f.printStackTrace();}
+        
+        
     }
     public ObservableList<Track> getTrackList() {
         return this.trackList;
@@ -99,21 +106,8 @@ public class View extends Application {
         controller.addGenreToTrack(0, 1);
         controller.addGenreToTrack(0, 0);
         controller.delGenre("Pop");
-       /*
-        System.out.println(controller.GenreList().toString());
-        System.out.println(controller.TrackList().toString());
-        System.out.println("Sort By SongName:");
-        controller.sortBySongName();
-        System.out.println(controller.TrackList().toString());
-        System.out.println("Sort By Artist:");
-        controller.sortByArtist();
-        System.out.println(controller.TrackList().toString());
-        System.out.println("Sort By Album:");
-        controller.sortByAlbum();
-        System.out.println(controller.TrackList().toString());
-        System.out.println("Sort By Length:");
-        controller.sortByLength();
-        System.out.println(controller.TrackList().toString());*/
+        trackList=(ObservableList<Track>)controller.TrackList();
+        genreList=(ObservableList<Genre>)controller.GenreList();
     }
     public Stage getPrimaryStage(){return primaryStage;}
 

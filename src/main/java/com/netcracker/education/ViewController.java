@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.netcracker.education.view;
+package com.netcracker.education;
 
-import com.netcracker.education.view.View;
-import com.netcracker.education.view.View;
 import com.netcracker.education.view.View;
 import com.netcracker.education.model.Track;
 import java.net.URL;
@@ -26,25 +24,28 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class ViewController {
 
+    @FXML
     private TableView<Track> trackListTable;
+    @FXML
     private TableColumn<Track, String> songNameColumn;
+    @FXML
     private TableColumn<Track, String> artistColumn;
+   @FXML
     private TableColumn<Track, String> albumColumn;
-    private TableColumn<Track, Duration> lengthColumn;
+    @FXML
+   private TableColumn<Track, Duration> lengthColumn;
     
     
     
     private View view;
-    
-    public ViewController(View view)
+    public ViewController()
     {}
-    
     @FXML
-     private void initialize() {
-        songNameColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("songName"));
-        artistColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("artist"));
-        albumColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("album"));
-        lengthColumn.setCellValueFactory(new PropertyValueFactory<Track,Duration>("length"));
+    public void initialize() {
+        songNameColumn.setCellValueFactory(cellData -> cellData.getValue().getSongNameProperty());
+        artistColumn.setCellValueFactory(cellData -> cellData.getValue().getArtistProperty());
+        albumColumn.setCellValueFactory(cellData -> cellData.getValue().getAlbumProperty());
+       lengthColumn.setCellValueFactory(cellData -> cellData.getValue().getLengthProperty());
     }
      
      public void setView(View view) {
