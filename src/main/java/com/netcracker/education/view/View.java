@@ -61,12 +61,9 @@ public class View extends Application {
         
     }
     public void showTrackLibrary(){
-        
-        
         try{
-            FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader();
         loader.setLocation(View.class.getResource("../View.fxml"));
-        //.setRoot(this);
         AnchorPane trackLibrary;
         trackLibrary = (AnchorPane) loader.load();
         rootLayout.setCenter(trackLibrary);
@@ -89,7 +86,7 @@ public class View extends Application {
         ArrayList<Genre> genreListTR1=new ArrayList<>();
         ArrayList<Genre> genreListTR2=new ArrayList<>();
         Control controller=new Control(trackList,genreList);
-        Duration duration = Duration.parse("PT20.345S");
+        Duration duration = Duration.parse("PT2M3S");
         controller.addGenre("Pop");  
         controller.addGenre("Rock");
         controller.addGenre("Rock");
@@ -105,7 +102,7 @@ public class View extends Application {
         controller.addTrack(" ", " ", " ", duration);
         controller.addGenreToTrack(0, 1);
         controller.addGenreToTrack(0, 0);
-        controller.delGenre("Pop");
+        //controller.delGenre("Pop");
         trackList=(ObservableList<Track>)controller.TrackList();
         genreList=(ObservableList<Genre>)controller.GenreList();
     }

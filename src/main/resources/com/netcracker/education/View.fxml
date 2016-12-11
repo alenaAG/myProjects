@@ -18,7 +18,7 @@
                       <TableColumn fx:id="artistColumn" prefWidth="84.0" text="Artist" />
                         <TableColumn fx:id="albumColumn" prefWidth="115.0" text="Album" />
                         <TableColumn fx:id="lengthColumn" prefWidth="77.0" text="Length" />
-                        <TableColumn maxWidth="1.7976931348623157E308" prefWidth="185.0" text="Genres" />
+                        <TableColumn fx:id="genreColumn" maxWidth="1.7976931348623157E308" prefWidth="185.0" text="Genres" />
                     </columns>
                   </TableView>
                </children>
@@ -26,13 +26,13 @@
           <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="421.0" prefWidth="220.0">
                <children>
                   <Label layoutX="14.0" layoutY="48.0" prefHeight="27.0" prefWidth="191.0" text="Song" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
-                  <Label layoutX="15.0" layoutY="75.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
+                  <Label fx:id="songNameLabel" layoutX="15.0" layoutY="75.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
                   <Label layoutX="15.0" layoutY="102.0" prefHeight="27.0" prefWidth="191.0" text="Artist" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
                   <Label layoutX="15.0" layoutY="156.0" prefHeight="27.0" prefWidth="191.0" text="Album" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
-                  <Label layoutX="15.0" layoutY="129.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
+                  <Label fx:id="artistLabel" layoutX="15.0" layoutY="129.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
                   <Label layoutX="14.0" layoutY="210.0" prefHeight="27.0" prefWidth="191.0" text="Length" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
-                  <Label layoutX="15.0" layoutY="183.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
-                  <Label layoutX="14.0" layoutY="237.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Label fx:id="albumLabel" layoutX="15.0" layoutY="183.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
+                  <Label fx:id="lengthLabel" layoutX="14.0" layoutY="237.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
                   <Accordion layoutX="10.0" layoutY="264.0" />
                 <TitledPane animated="false" layoutX="9.0" layoutY="264.0" text="Genres" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="9.0">
                   <content>

@@ -105,6 +105,29 @@ public class Track  {
     public Duration getLength(){return length.get();}
     public List<Genre> getGenreList(){return genreList;}
     public ObservableList<Genre> getGenreListProperty(){return genreList;}
+    public StringProperty getGenreListStringProperty(){
+        String s="";
+        for(Genre g:genreList){s+=g.getGenreName(); s+="\n";}
+        StringProperty s2= new SimpleStringProperty(s);
+        return s2;
+         }
+    public StringProperty getLengthStringProperty(){
+        String s="";
+        Duration temp=Duration.parse("PT0M");
+        temp=length.getValue();
+        long d,h,m,sec,ms;
+        d= temp.toDays();
+        temp=temp.minusDays(d);
+        h=temp.toHours();
+        temp=temp.minusHours(h);
+        m=temp.toMinutes();
+        temp=temp.minusMinutes(m);
+        sec=temp.getSeconds();
+        temp=temp.minusSeconds(sec);
+        s=d+":"+h+":"+m+":"+sec;
+        StringProperty s2= new SimpleStringProperty(s);
+        return s2;
+         }
     public void setId(int id){this.id.set(id);}
     public void setSongName(String songName){if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");this.songName.set(songName);}
     public void setArtist(String artist){if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");this.artist.set(artist);}
