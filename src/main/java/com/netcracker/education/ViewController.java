@@ -12,10 +12,13 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -53,7 +56,23 @@ public class ViewController {
    private Label lengthLabel;
    @FXML
    private ListView<Genre> genreList;
-   
+   @FXML
+    private void handleDeleteTrack() {
+        int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex>=0)
+        {
+        trackListTable.getItems().remove(selectedIndex);
+        }
+        else
+        {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.initOwner(view.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Person Selected");
+            alert.setContentText("Please select a track in the table.");
+            alert.showAndWait();
+        }
+    }
     
     
     private View view;
@@ -81,9 +100,7 @@ public class ViewController {
              songNameLabel.setText(track.getSongName());
              artistLabel.setText(track.getArtist());
              albumLabel.setText(track.getAlbum());
-            // lengthLabel.setText(DateUtil.format(track.getLength()));
              lengthLabel.setText(track.getLengthStringProperty().getValue());
-           //  genreList.setItems(track.getGenreListProperty());
          }
          else
          {
@@ -91,10 +108,27 @@ public class ViewController {
              artistLabel.setText("");
              albumLabel.setText("");
              lengthLabel.setText("");
-             
-             
-            
          }
+     }
+     private Duration parseLength(StringProperty s)
+     {
+         Duration duration=null;
+         try{
+             String[] hmnArray= s.getValue().split(":",3);
+             duration=Duration.ofHours(Integer.parseInt(hmnArray[0]));
+             duration=duration.plus(Duration.ofMinutes(Integer.parseInt(hmnArray[1])));
+             duration=duration.plus(Duration.ofSeconds(Integer.parseInt(hmnArray[2])));
+         }
+         catch(Exception e){
+             System.err.println("Введен неверный формат");
+             Alert alert = new Alert(AlertType.WARNING);
+            alert.initOwner(view.getPrimaryStage());
+            alert.setTitle("Invalid Format");
+            alert.setHeaderText("Format Error");
+            alert.setContentText("Please enter the length format hh:mm:ss.");
+            alert.showAndWait();
+         }
+         return duration;
      }
     
 }

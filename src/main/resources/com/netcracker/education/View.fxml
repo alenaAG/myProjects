@@ -43,7 +43,7 @@
                      <children>
                         <Button layoutX="15.0" layoutY="553.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="65.0" text="Add" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
                         <Button layoutX="80.0" layoutY="553.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="65.0" text="Edit" AnchorPane.bottomAnchor="14.0" />
-                        <Button layoutX="145.0" layoutY="553.0" mnemonicParsing="false" text="Delete" AnchorPane.bottomAnchor="14.0" />
+                        <Button layoutX="145.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleDeleteTrack" text="Delete" AnchorPane.bottomAnchor="14.0" />
                      </children>
                   </HBox>
                </children>

@@ -116,18 +116,16 @@ public class Track  {
         Duration temp=Duration.parse("PT0M");
         temp=length.getValue();
         long d,h,m,sec,ms;
-        d= temp.toDays();
-        temp=temp.minusDays(d);
         h=temp.toHours();
         temp=temp.minusHours(h);
         m=temp.toMinutes();
         temp=temp.minusMinutes(m);
         sec=temp.getSeconds();
         temp=temp.minusSeconds(sec);
-        s=d+":"+h+":"+m+":"+sec;
+        s=String.format("%02d:%02d:%02d", h , m, sec);
         StringProperty s2= new SimpleStringProperty(s);
         return s2;
-         }
+    }
     public void setId(int id){this.id.set(id);}
     public void setSongName(String songName){if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");this.songName.set(songName);}
     public void setArtist(String artist){if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");this.artist.set(artist);}
