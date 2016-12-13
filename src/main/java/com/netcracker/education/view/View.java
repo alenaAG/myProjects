@@ -89,7 +89,6 @@ public class View extends Application {
         Duration duration = Duration.parse("PT2M3S");
         controller.addGenre("Pop");  
         controller.addGenre("Rock");
-        controller.addGenre("Rock");
         controller.addGenre("NewMusic");
         controller.addGenre("Ambient");
         controller.addTrack("In NY","JAY-Z","NY", duration, genreListTR1);
@@ -99,10 +98,7 @@ public class View extends Application {
         controller.addTrack("Fine","Drake","Good",duration);
         controller.addTrack("Damn","Damn","Bad",duration);
         controller.addTrack("Anapa","YOYO","Anapa",duration);
-        controller.addTrack(" ", " ", " ", duration);
-        controller.addGenreToTrack(0, 1);
         controller.addGenreToTrack(0, 0);
-        //controller.delGenre("Pop");
         trackList=(ObservableList<Track>)controller.TrackList();
         genreList=(ObservableList<Genre>)controller.GenreList();
     }

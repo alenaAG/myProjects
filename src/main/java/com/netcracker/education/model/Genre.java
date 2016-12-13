@@ -56,8 +56,7 @@ public class Genre {
         public String toString()
         {
             String s;
-            s="ID: "+this.getId()+" GENRE: "+this.getGenreName();
-            
+            s=this.getGenreName();
             return s;
         }
         

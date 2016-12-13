@@ -26,26 +26,38 @@
           <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="421.0" prefWidth="220.0">
                <children>
                   <Label layoutX="14.0" layoutY="48.0" prefHeight="27.0" prefWidth="191.0" text="Song" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
-                  <Label fx:id="songNameLabel" layoutX="15.0" layoutY="75.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
                   <Label layoutX="15.0" layoutY="102.0" prefHeight="27.0" prefWidth="191.0" text="Artist" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
                   <Label layoutX="15.0" layoutY="156.0" prefHeight="27.0" prefWidth="191.0" text="Album" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
-                  <Label fx:id="artistLabel" layoutX="15.0" layoutY="129.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
                   <Label layoutX="14.0" layoutY="210.0" prefHeight="27.0" prefWidth="191.0" text="Length" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
-                  <Label fx:id="albumLabel" layoutX="15.0" layoutY="183.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
-                  <Label fx:id="lengthLabel" layoutX="14.0" layoutY="237.0" prefHeight="27.0" prefWidth="191.0" text="Label" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
                   <Accordion layoutX="10.0" layoutY="264.0" />
-                <TitledPane animated="false" layoutX="9.0" layoutY="264.0" text="Genres" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="9.0">
+                <TitledPane animated="false" layoutX="10.0" layoutY="276.0" prefHeight="238.0" prefWidth="202.0" text="Genres" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="8.0">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="220.0" prefWidth="200.0">
+                           <children>
+                              <ListView fx:id="genreListView" layoutX="-1.0" prefHeight="207.0" prefWidth="202.0" />
+                              <HBox prefHeight="31.0" prefWidth="202.0">
+                                 <children>
+                                    <Button fx:id="addGenreButton" mnemonicParsing="false" text="Add" />
+                                    <Button fx:id="editGenreButton" mnemonicParsing="false" prefHeight="31.0" text="Edit" />
+                                    <Button fx:id="deleteGenreButton" mnemonicParsing="false" text="Delete" />
+                                    <Button fx:id="okGenreButton" mnemonicParsing="false" prefHeight="31.0" text="OK" visible="false" />
+                                 </children>
+                              </HBox>
+                           </children></AnchorPane>
                   </content>
                 </TitledPane>
                   <HBox layoutX="15.0" layoutY="553.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0">
                      <children>
-                        <Button layoutX="15.0" layoutY="553.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="65.0" text="Add" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
-                        <Button layoutX="80.0" layoutY="553.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="65.0" text="Edit" AnchorPane.bottomAnchor="14.0" />
+                        <Button fx:id="addButton" layoutX="15.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleAddTrack" prefHeight="31.0" prefWidth="65.0" text="Add" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
+                        <Button fx:id="editButton" layoutX="80.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleEditTrack" prefHeight="31.0" prefWidth="65.0" text="Edit" AnchorPane.bottomAnchor="14.0" />
                         <Button layoutX="145.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleDeleteTrack" text="Delete" AnchorPane.bottomAnchor="14.0" />
                      </children>
                   </HBox>
+                  <TextField fx:id="songNameField" editable="false" layoutX="16.0" layoutY="75.0" />
+                  <TextField fx:id="artistField" editable="false" layoutX="17.0" layoutY="129.0" />
+                  <TextField fx:id="albumField" editable="false" layoutX="17.0" layoutY="183.0" />
+                  <TextField fx:id="lengthField" editable="false" layoutX="16.0" layoutY="237.0" />
+                  <Button fx:id="okButton" layoutX="15.0" layoutY="520.0" mnemonicParsing="false" onAction="#handleOkButton" text="OK" visible="false" />
                </children>
             </AnchorPane>
         </items>
