@@ -55,10 +55,10 @@ public class Control {
     {
         try
         {  
-        int id=0;
+        int id=-1;
         Track track=new Track(id,songName,artist,album,length,genreList);
         if(TrackList().contains(track)) throw new AlreadyExistsException("Track already exists!");
-        if(TrackList().isEmpty())id=1; else id=TrackList().get(TrackList().size()-1).getId()+1;
+        if(TrackList().isEmpty())id=0; else id=TrackList().get(TrackList().size()-1).getId()+1;
         track.setId(id);
         TrackList().add(track);
         }
@@ -77,8 +77,7 @@ public class Control {
         try
         {
             Genre genre=new Genre(s);
-            int id=0;
-        if (GenreList().isEmpty()){id =1; genre.setId(id);GenreList().add(genre);}
+            int id=-1;       if (GenreList().isEmpty()){id =0; genre.setId(id);GenreList().add(genre);}
         else
         {
         if(GenreList().contains(genre))throw new AlreadyExistsException("Genre alredy exists");

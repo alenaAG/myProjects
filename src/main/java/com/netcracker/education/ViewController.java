@@ -5,17 +5,22 @@
  */
 package com.netcracker.education;
 
+import com.netcracker.education.controller.AlreadyExistsException;
 import com.netcracker.education.model.Genre;
 import com.netcracker.education.view.View;
 import com.netcracker.education.model.Track;
 import java.net.URL;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -24,6 +29,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -59,8 +65,6 @@ public class ViewController {
    @FXML
    private TextField lengthField;
    @FXML
-   private ListView<Genre> genreList;
-   @FXML
    private Button okButton;
    @FXML
    private Button addButton;
@@ -81,6 +85,9 @@ public class ViewController {
    private boolean editIsClicked=false;
    private boolean okIsClicked=false;
    private boolean cancelIsClicked=false;
+   private boolean genresSelected=false;
+   private Genre selectedGenre;
+   private ObservableList<Genre> selectedGenres;
    
    
    @FXML
@@ -165,7 +172,47 @@ public class ViewController {
             alert.showAndWait();
         }
     }
-    
+    @FXML
+    private void handleGenreSelected(Genre genre)
+    {
+        selectedGenre=genre;
+    }
+    private void addGenreToTrack(Track track,Genre genre)
+    {
+        String errorMessage = "";
+        try{track.addGenre(genre);}
+        catch(AlreadyExistsException e){errorMessage += "TrackAlready has this genre!\n"; }
+        if (errorMessage.length()!=0){
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("Please choose another genre");
+            alert.setContentText(errorMessage);
+            alert.showAndWait();}
+    }
+    @FXML 
+    private void handleAddGenreButton()
+    {
+        {
+        int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex>=0)
+        {
+            genreListView.setItems(view.getGenreList());
+        okGenreButton.setVisible(true);
+        genreListView.getSelectionModel().selectedItemProperty().addListener((observale, oldValue,newValue)->addGenreToTrack(trackListTable.getSelectionModel().getSelectedItem(),newValue));
+        
+        
+        }
+        else
+        {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.initOwner(view.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Track Selected");
+            alert.setContentText("Please select a track in the table.");
+            alert.showAndWait();
+        }
+        }
+    }
     
     private View view;
     public ViewController()
@@ -185,7 +232,7 @@ public class ViewController {
      public void setView(View view) {
         this.view = view; 
         trackListTable.setItems(view.getTrackList());
-        genreListView.setItems(view.getGenreList());
+       genreListView.setItems(view.getGenreList());
     }
      private static boolean validateString(String s)
     {
@@ -238,6 +285,7 @@ public class ViewController {
              artistField.setText(track.getArtist());
              albumField.setText(track.getAlbum());
              lengthField.setText(track.getLengthStringProperty().getValue());
+             genreListView.setItems(track.getGenreListProperty());
          }
          else
          {
@@ -245,6 +293,7 @@ public class ViewController {
              artistField.setText("");
              albumField.setText("");
              lengthField.setText("");
+             //genreListView.setItems(view.getGenreList());
          }
      }
     private Duration parseLength(String s)

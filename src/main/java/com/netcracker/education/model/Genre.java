@@ -2,39 +2,51 @@ package com.netcracker.education.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Genre {
-	private int id;
-	private String genreName;
-	private List trackList;
+	private IntegerProperty id;
+	private StringProperty genreName;
+	private ObservableList trackList;
         private final static String DEFAULT_NAME="default";
-        private final static int DEFAULT_ID=-1;
-        public Genre(){this.id=DEFAULT_ID;this.genreName=DEFAULT_NAME;}
+        private final static Integer DEFAULT_ID=-1;
+        public Genre(){this.id=new SimpleIntegerProperty(DEFAULT_ID);this.genreName=new SimpleStringProperty(DEFAULT_NAME);}
 	public Genre(int id, String name, List<Track> trackList)
          {
              if (!Genre.validateString(name)) throw new IllegalArgumentException("Incorect GenreName");
-             this.id=id;
-             this.genreName=name;
-             this.trackList=trackList;
+             this.id=new SimpleIntegerProperty(id);
+             this.genreName=new SimpleStringProperty(name);
+             this.trackList=FXCollections.observableList(trackList);
          }
         public Genre(String name)
          {
              if (!Genre.validateString(name)) throw new IllegalArgumentException("Incorect GenreName");
-             this.id=DEFAULT_ID;
-             this.genreName=name;
+             this.id=new SimpleIntegerProperty(DEFAULT_ID);
+             this.genreName=new SimpleStringProperty(name);
          }
 	public int getId(){
-		return id;
+		return id.getValue();
 		}
 	public void setId(int id){
-		this.id=id;
+		this.id.setValue(id);;
 		}
         public String getGenreName(){
-		return genreName;
+		return genreName.getValue();
 		}
+        public StringProperty getGenreNameProperty()
+        {
+            return genreName;
+        }
+        public IntegerProperty getIdProperty()
+        {return id;}
 	public void setGenreName(String genreName){
                 if (!Genre.validateString(genreName)) throw new IllegalArgumentException("Incorect GenreName");
-		this.genreName=genreName;
+		this.genreName.setValue(genreName);
 		}
         private static boolean validateString(String s)
         {
@@ -47,7 +59,7 @@ public class Genre {
    	@Override
         public boolean equals(Object object)
         {
-            if (this.getClass()!=object.getClass()) return false;
+            //if (!(this.getClass()==object.getClass())) return false;
             Genre genre=(Genre)object;
             if (this.getGenreName()==genre.getGenreName()) return true;
             return false;

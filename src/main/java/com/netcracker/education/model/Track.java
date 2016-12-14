@@ -128,7 +128,7 @@ public class Track  {
     }
     public void setId(int id){this.id.set(id);}
     public void setSongName(String songName){
-        //if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
+        if (!Track.validateString(songName)) throw new IllegalArgumentException("Incorrect Songname");
         this.songName.set(songName);}
     public void setArtist(String artist){if (!Track.validateString(artist)) throw new IllegalArgumentException("Incorrect ArtistName");this.artist.set(artist);}
     public void setLength(Duration length){this.length.setValue(length);}
