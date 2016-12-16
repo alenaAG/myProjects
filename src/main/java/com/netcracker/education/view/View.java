@@ -7,6 +7,7 @@ package com.netcracker.education.view;
  */
 
 
+import com.netcracker.education.AddGenreController;
 import com.netcracker.education.ViewController;
 import com.netcracker.education.ViewController;
 import com.netcracker.education.controller.Control;
@@ -27,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -40,6 +42,7 @@ public class View extends Application {
     
     private ObservableList<Track> trackList = FXCollections.observableArrayList();
     private ObservableList<Genre> genreList=FXCollections.observableArrayList();
+    private Control controller;
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage=primaryStage;
@@ -47,6 +50,7 @@ public class View extends Application {
         initRootLayout();
         showTrackLibrary();
     }
+    public Control Controller(){return this.controller;}
     
     public void initRootLayout(){
         try{
@@ -71,9 +75,28 @@ public class View extends Application {
         viewController.setView(this);
         }
         catch(IOException f){f.printStackTrace();}
-        
-        
     }
+    public boolean showGenreEditDialog(Genre genre) {
+    try {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(View.class.getResource("../AddGenre.fxml"));
+        AnchorPane page = (AnchorPane) loader.load();
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Edit Genre");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(primaryStage);
+        Scene scene = new Scene(page);
+        dialogStage.setScene(scene);
+        AddGenreController controller = loader.getController();
+        controller.setDialogStage(dialogStage);
+        controller.setGenre(genre);
+        dialogStage.showAndWait();
+        return controller.isOkClicked();
+    } catch (IOException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
     public ObservableList<Track> getTrackList() {
         return this.trackList;
     }
@@ -85,8 +108,9 @@ public class View extends Application {
         
         ArrayList<Genre> genreListTR1=new ArrayList<>();
         ArrayList<Genre> genreListTR2=new ArrayList<>();
-        Control controller=new Control(trackList,genreList);
+        controller=new Control(trackList,genreList);
         Duration duration = Duration.parse("PT2M3S");
+        
         controller.addGenre("Pop");  
         controller.addGenre("Rock");
         controller.addGenre("NewMusic");

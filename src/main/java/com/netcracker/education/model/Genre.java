@@ -59,7 +59,8 @@ public class Genre {
    	@Override
         public boolean equals(Object object)
         {
-            //if (!(this.getClass()==object.getClass())) return false;
+            if (object==null) return false;
+            if (!(this.getClass()==object.getClass())) return false;
             Genre genre=(Genre)object;
             if (this.getGenreName()==genre.getGenreName()) return true;
             return false;

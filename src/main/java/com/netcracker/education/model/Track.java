@@ -35,7 +35,7 @@ public class Track  {
         this.album=new SimpleStringProperty(DEFAULT_ALBUM);
         this.artist=new SimpleStringProperty(DEFAULT_ARTIST);
         this.length=new SimpleObjectProperty<Duration>(DEFAULT_LENGTH);
-        ObservableList<Genre> observableList = FXCollections.observableList(DEAFAULT_GENRE_LIST);
+        ObservableList<Genre> observableList = FXCollections.observableList(new ArrayList());
         this.genreList= observableList;
     };
     public Track(String songName,String artist, String album,Duration length, List genreList)
@@ -61,7 +61,7 @@ public class Track  {
         this.artist=new SimpleStringProperty(artist);
         this.songName=new SimpleStringProperty(songName);
         this.length=new SimpleObjectProperty<Duration>(length);
-        ObservableList<Genre> observableList = FXCollections.observableList(DEAFAULT_GENRE_LIST);
+        ObservableList<Genre> observableList = FXCollections.observableList(new ArrayList());
         this.genreList= observableList;
         this.id=new SimpleIntegerProperty(DEFAULT_ID);
     }
@@ -75,7 +75,7 @@ public class Track  {
         this.artist=new SimpleStringProperty(artist);
         this.songName=new SimpleStringProperty(songName);
         this.length=new SimpleObjectProperty<Duration>(length);
-        ObservableList<Genre> observableList = FXCollections.observableList(DEAFAULT_GENRE_LIST);
+        ObservableList<Genre> observableList = FXCollections.observableList(new ArrayList());
         this.genreList= observableList;
         this.id=new SimpleIntegerProperty(id);
     }
@@ -110,7 +110,7 @@ public class Track  {
         for(Genre g:genreList){s+=g.getGenreName(); s+="\n";}
         StringProperty s2= new SimpleStringProperty(s);
         return s2;
-         }
+    }
     public StringProperty getLengthStringProperty(){
         String s="";
         Duration temp=Duration.parse("PT0M");
@@ -138,13 +138,14 @@ public class Track  {
         this.genreList= observableList;
     }
     public void addGenre(Genre genre) throws AlreadyExistsException{
-        if (this.getGenreList().contains(this.getGenreList().contains(genre))) throw new AlreadyExistsException("Track already has this genre!");
+        if (this.getGenreList().contains(genre)) throw new AlreadyExistsException("Track already has this genre!");
         this.genreList.add(genre);
     }
     public void delGenre(Genre genre){if (this.genreList.contains(genre)) genreList.remove(genre);} //написать исключение 
     @Override
         public boolean equals(Object object)
         {
+            if (object==null) return false;
             if (this.getClass()!=object.getClass()) return false;
             Track track=(Track)object;
             if (this.getSongName()!=track.getSongName()) return false;

@@ -40,10 +40,10 @@ public class Control {
     {
         try
         {
-            int id=0;
+        int id=-1;
         Track track=new Track(id,songName,artist,album,length);
         if(TrackList().contains(track)) throw new AlreadyExistsException("Track already exists!");
-        if(TrackList().isEmpty())id=1; else id=TrackList().get(TrackList().size()-1).getId()+1;
+        if(TrackList().isEmpty())id=0; else id=TrackList().get(TrackList().size()-1).getId()+1;
         track.setId(id);
         TrackList().add(track);
         }
@@ -133,6 +133,17 @@ public class Control {
     public void sortByAlbum()
     {
         Collections.sort(TrackList(), new Track.TracksByAlbumComparator());
+    }
+    
+    public Genre getGenreById(int id)
+    {
+        for(Genre genre:genreList)  if (genre.getId()==id) return genre;
+        return null;
+    }
+    public Track getTrackById(int id)
+    {
+        for(Track track:trackList)  if (track.getId()==id) return track;
+        return null;
     }
     
 }
