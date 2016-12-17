@@ -10,7 +10,7 @@
    <children>
       <Label layoutX="14.0" layoutY="54.0" prefHeight="36.0" prefWidth="113.0" text="Genre Name" />
       <TextField id="genreName" fx:id="genreNameField" layoutX="14.0" layoutY="90.0" />
-      <Button fx:id="handleOkButton" layoutX="80.0" layoutY="180.0" mnemonicParsing="false" text="OK" />
-      <Button fx:id="handleCancelButton" layoutX="127.0" layoutY="180.0" mnemonicParsing="false" text="CANCEL" />
+      <Button layoutX="80.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleOkButton" text="OK" />
+      <Button layoutX="127.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleCancelButton" text="CANCEL" />
    </children>
 </AnchorPane>

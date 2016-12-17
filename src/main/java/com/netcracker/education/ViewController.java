@@ -6,6 +6,7 @@
 package com.netcracker.education;
 
 import com.netcracker.education.controller.AlreadyExistsException;
+import com.netcracker.education.controller.Control;
 import com.netcracker.education.model.Genre;
 import com.netcracker.education.view.View;
 import com.netcracker.education.model.Track;
@@ -93,12 +94,14 @@ public class ViewController {
     private boolean addGenreButtonIsClicked;
     private boolean editGenreButtonIsClicked;
     private boolean deleteGenreButtonIsClicked;
+    private Control controller;
 
     @FXML
     private void handleDeleteTrack() {
         int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            view.getTrackList().remove(trackListTable.getItems().get(selectedIndex));
+            //view.getTrackList().remove(trackListTable.getItems().get(selectedIndex));
+            controller.TrackList().remove(trackListTable.getItems().get(selectedIndex));
 
         } else {
             Alert alert = new Alert(AlertType.WARNING);
@@ -182,6 +185,9 @@ public class ViewController {
             alert.showAndWait();
         }
     }
+    
+    private void addGenre(Genre genre)
+    {}
 
     private void delGenreFromTrack(int trackId, int genreId) {
         view.Controller().getTrackById(trackId).delGenre(view.Controller().getGenreById(genreId));
@@ -194,15 +200,6 @@ public class ViewController {
         if (selectedIndex >= 0) {
             okGenreButton.setVisible(true);
             genreListView.setItems(view.getGenreList());
-        } else {
-            genreListView.getItems().clear();
-            Genre tempGenre = new Genre();
-            boolean okClicked = view.showGenreEditDialog(tempGenre);
-            if (okClicked) {
-                view.getGenreList().add(tempGenre);
-            }
-            genreListView.setItems(view.getGenreList());
-
         }
     }
 
@@ -210,6 +207,27 @@ public class ViewController {
     private void handleEditGenreButton() {
         editGenreButtonIsClicked = true;
 
+    }
+    @FXML 
+    private void handleNewButton()
+    {
+            Genre tempGenre = new Genre();
+            boolean okClicked = view.showGenreEditDialog(tempGenre);
+            if (okClicked) {
+                try{
+                view.Controller().addGenre(tempGenre.getGenreName());
+                }
+                catch(AlreadyExistsException e){
+                    Alert alert = new Alert(AlertType.WARNING);
+                alert.initOwner(view.getPrimaryStage());
+                alert.setTitle("ERROR");
+                alert.setHeaderText("This genre already exists");
+                alert.setContentText("Please enter another genre.");
+                alert.showAndWait();
+                }
+                
+            }
+            genreListView.setItems(view.getGenreList());
     }
 
     @FXML
@@ -257,6 +275,7 @@ public class ViewController {
                 deleteGenreButtonIsClicked = false;
             } else {
                 if (editGenreButtonIsClicked) {
+                    
                 }
             }
         }
@@ -283,6 +302,7 @@ public class ViewController {
 
     public void setView(View view) {
         this.view = view;
+       // controller= new Control(view.getTrackList(),view.getGenreList());
         trackListTable.setItems(view.getTrackList());
         genreListView.setItems(view.getGenreList());
     }

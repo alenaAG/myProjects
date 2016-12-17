@@ -10,6 +10,7 @@ package com.netcracker.education.view;
 import com.netcracker.education.AddGenreController;
 import com.netcracker.education.ViewController;
 import com.netcracker.education.ViewController;
+import com.netcracker.education.controller.AlreadyExistsException;
 import com.netcracker.education.controller.Control;
 import com.netcracker.education.model.Genre;
 import com.netcracker.education.model.Track;
@@ -110,11 +111,13 @@ public class View extends Application {
         ArrayList<Genre> genreListTR2=new ArrayList<>();
         controller=new Control(trackList,genreList);
         Duration duration = Duration.parse("PT2M3S");
-        
+        try{
         controller.addGenre("Pop");  
         controller.addGenre("Rock");
         controller.addGenre("NewMusic");
         controller.addGenre("Ambient");
+        }
+        catch(AlreadyExistsException e){}
         controller.addTrack("In NY","JAY-Z","NY", duration, genreListTR1);
        controller.addGenreToTrack(0, 1);
         controller.addTrack("Too Good", "Drake", "Good", duration, genreListTR2);
