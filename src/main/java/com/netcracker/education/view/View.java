@@ -116,18 +116,19 @@ public class View extends Application {
         controller.addGenre("Rock");
         controller.addGenre("NewMusic");
         controller.addGenre("Ambient");
-        }
-        catch(AlreadyExistsException e){}
         controller.addTrack("In NY","JAY-Z","NY", duration, genreListTR1);
-       controller.addGenreToTrack(0, 1);
         controller.addTrack("Too Good", "Drake", "Good", duration, genreListTR2);
-       controller.addGenreToTrack(1, 1);
         controller.addTrack("Fine","Drake","Good",duration);
         controller.addTrack("Damn","Damn","Bad",duration);
         controller.addTrack("Anapa","YOYO","Anapa",duration);
+        
+       controller.addGenreToTrack(0, 1);
        controller.addGenreToTrack(0, 2);
+       controller.addGenreToTrack(1, 1);
         trackList=(ObservableList<Track>)controller.TrackList();
         genreList=(ObservableList<Genre>)controller.GenreList();
+         }
+        catch(AlreadyExistsException e){e.printStackTrace();}
     }
     public Stage getPrimaryStage(){return primaryStage;}
 

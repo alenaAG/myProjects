@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.netcracker.education;
+
 import com.netcracker.education.model.Genre;
 import com.netcracker.education.model.Track;
 import javafx.fxml.FXML;
@@ -17,26 +18,31 @@ import javafx.stage.Stage;
  * @author 1
  */
 public class AddGenreController {
+
     @FXML
     private TextField genreNameField;
-    
+
     private Stage dialogStage;
     private Genre genre;
     private boolean okClicked = false;
-    
-     @FXML
+
+    @FXML
     private void initialize() {
     }
+
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
+
     public void setGenre(Genre genre) {
-        this.genre=genre;
+        this.genre = genre;
         genreNameField.setText(genre.getGenreName());
     }
+
     public boolean isOkClicked() {
         return okClicked;
     }
+
     @FXML
     private void handleOkButton() {
         if (isInputValid()) {
@@ -44,20 +50,20 @@ public class AddGenreController {
             okClicked = true;
             dialogStage.close();
         }
-        
+
     }
+
     @FXML
     private void handleCancelButton() {
         dialogStage.close();
     }
-    
-     private boolean isInputValid() {
+
+    private boolean isInputValid() {
         String errorMessage = "";
 
-        if (genreNameField.getText() == null || genreNameField.getText().length() == 0||!(validateString(genreNameField.getText()))) {
-            errorMessage += "No valid genre name!\n"; 
+        if (genreNameField.getText() == null || genreNameField.getText().length() == 0 || !(validateString(genreNameField.getText()))) {
+            errorMessage += "No valid genre name!\n";
         }
-        
 
         if (errorMessage.length() == 0) {
             return true;
@@ -71,7 +77,8 @@ public class AddGenreController {
             return false;
         }
     }
-     private static boolean validateString(String s) {
+
+    private static boolean validateString(String s) {
         boolean b = true;
         if (s == null) {
             return false;
@@ -88,7 +95,4 @@ public class AddGenreController {
         return b;
     }
 
-
-
-    
 }
