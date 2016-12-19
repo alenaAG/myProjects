@@ -2,6 +2,7 @@
 package com.netcracker.education.model;
 
 import com.netcracker.education.controller.AlreadyExistsException;
+import java.io.Serializable;
 import java.time.Duration;
 import static java.time.Duration.*;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Track  {
+public class Track implements Serializable {
     
     private final static String DEFAULT_ARTIST="default";
     private final static int DEFAULT_ID=-1;
@@ -138,10 +139,16 @@ public class Track  {
         this.genreList= observableList;
     }
     public void addGenre(Genre genre) throws AlreadyExistsException{
-        if (this.getGenreList().contains(genre)) throw new AlreadyExistsException("Track already has this genre!");
+        if (containsGenre(this.genreList,genre)) throw new AlreadyExistsException("Track already has this genre!");
         this.genreList.add(genre);
     }
-    public void delGenre(Genre genre){if (this.genreList.contains(genre)) genreList.remove(genre);} //написать исключение 
+    public void delGenre(Genre genre){
+        for(int i=0;i<this.genreList.size();i++)
+        {
+            Genre gen=this.genreList.get(i);
+            if((gen.getId()==genre.getId())&&(gen.getGenreName().equals(genre.getGenreName())))this.genreList.remove(gen);
+        }
+    } //написать исключение 
     @Override
         public boolean equals(Object object)
         {
@@ -198,12 +205,27 @@ public class Track  {
     public String toString()
     {
         String s;
-        s="ID: "+this.getId()+" SONGNAME: "+this.getSongName()+" ARTIST: "+this.getArtist()+" ALBUM: "+ this.getAlbum()+" LENGTH: "+this.getLength().toString()+" GENRES: ";
+        s=this.getId()+"\n"+this.getSongName()+"\n"+this.getArtist()+"\n"+ this.getAlbum()+"\n"+this.getLength()+"\n"+this.genreList.size()+"\n";
         for(Genre genre:this.genreList)
         { 
-            s+=genre.getGenreName()+" ";
+            s+=genre.getId()+"\n"+genre.getGenreName()+"\n";
         }
-        s+="\n";
         return s;
+    }
+    public boolean containsGenre(ObservableList<Genre> genreList, Genre genre) {
+        if (genreList.isEmpty()) {
+            return false;
+        }
+        boolean b = true;
+        for (Genre gen : genreList) {
+            b = true;
+            if (!gen.getGenreName().equals(genre.getGenreName())) {
+                b = false;
+            }
+            if (b) {
+                return true;
+            }
+        }
+        return b;
     }
 }

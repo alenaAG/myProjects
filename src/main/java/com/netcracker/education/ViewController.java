@@ -243,7 +243,7 @@ public class ViewController {
     }
     
     private void delGenreFromTrack(int trackId, int genreId) {
-        controller.getTrackById(trackId).delGenre(view.Controller().getGenreById(genreId));
+        controller.getTrackById(trackId).delGenre(controller.getGenreById(genreId));
     }
     
     @FXML
@@ -323,6 +323,7 @@ public class ViewController {
                 if (trackId >= 0) {
                     genreId = genreListView.getSelectionModel().getSelectedItem().getId();
                     addGenreToTrack(trackId, genreId);
+                    genreListView.setItems(trackListTable.getSelectionModel().getSelectedItem().getGenreListProperty());
                 } else {
                     Alert alert = new Alert(AlertType.WARNING);
                     alert.initOwner(view.getPrimaryStage());
@@ -339,6 +340,8 @@ public class ViewController {
                     int genreId = genreListView.getSelectionModel().getSelectedItem().getId();
                     if (genreId >= 0) {
                         controller.delGenre(controller.getGenreById(genreId));
+                        trackListTable.setItems(controller.TrackList());
+                        genreListView.refresh();
                     }
                     
                 } else {
@@ -348,6 +351,8 @@ public class ViewController {
                         genreId = genreListView.getSelectionModel().getSelectedItem().getId();
                         if (genreId >= 0) {
                             delGenreFromTrack(trackId, genreId);
+                            trackListTable.refresh();
+                            genreListView.setItems(trackListTable.getSelectionModel().getSelectedItem().getGenreListProperty());
                         }
                     } else {
                         Alert alert = new Alert(AlertType.WARNING);
@@ -363,7 +368,9 @@ public class ViewController {
         }
         okGenreButtonIsClicked = false;
         okGenreButton.setVisible(false);
-        genreListView.setItems(trackListTable.getSelectionModel().getSelectedItem().getGenreListProperty());
+        deleteGenreButtonIsClicked=false;
+        addGenreButtonIsClicked=false;
+        
         
     }
     private View view;
@@ -388,6 +395,9 @@ public class ViewController {
         trackListTable.setItems(controller.TrackList());
         genreListView.setItems(controller.GenreList());
     }
+    
+    public ObservableList<Track> getTrackLib(){return this.controller.TrackList();}
+    public ObservableList<Genre> getGenreLib(){return this.controller.GenreList();}
     
     private static boolean validateString(String s) {
         boolean b = true;
@@ -465,12 +475,6 @@ public class ViewController {
             duration = duration.plus(Duration.ofMinutes(Integer.parseInt(hmnArray[1])));
             duration = duration.plus(Duration.ofSeconds(Integer.parseInt(hmnArray[2])));
         } catch (Exception e) {
-            /*Alert alert = new Alert(AlertType.WARNING);
-             alert.initOwner(view.getPrimaryStage());
-             alert.setTitle("ERROR");
-             alert.setHeaderText("Format Error");
-             alert.setContentText("Please enter the length format hh:mm:ss.");
-             alert.showAndWait();*/
         }
         return duration;
     }

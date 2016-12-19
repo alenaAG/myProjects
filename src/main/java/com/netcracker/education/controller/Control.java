@@ -105,11 +105,11 @@ public class Control {
     }
 
     public void delGenre(Genre genre) {
-        if (GenreList().contains(genre)) {
-            GenreList().remove(genre);
-            for (Track track : TrackList()) {
-                if (track.getGenreList().contains(genre)) {
-                    track.getGenreList().remove(genre);
+        if (containsGenre(this.genreList,genre)) {
+            this.genreList.remove(genre);
+            for (Track track : this.trackList) {
+                if (containsGenre(track.getGenreListProperty(),genre)) {
+                    track.delGenre(genre);
                 }
             }
         }
@@ -125,11 +125,13 @@ public class Control {
 
     public void delGenre(String genreS) {
         Genre genre = new Genre(genreS);
-        if (GenreList().contains(genre)) {
-            GenreList().remove(genre);
-            for (Track track : TrackList()) {
-                if (track.getGenreList().contains(genre)) {
-                    track.getGenreList().remove(genre);
+        if (containsGenre(GenreList(),genre)) {
+           this.genreList.remove(genre);
+            for (Track track : this.trackList) {
+                if (containsGenre(track.getGenreListProperty(),genre)) {
+                    track.delGenre(genre);
+                    
+                    
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.netcracker.education.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.IntegerProperty;
@@ -9,7 +10,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Genre {
+public class Genre implements Serializable{
 
     private IntegerProperty id;
     private StringProperty genreName;
@@ -22,13 +23,12 @@ public class Genre {
         this.genreName = new SimpleStringProperty(DEFAULT_NAME);
     }
 
-    public Genre(int id, String name, List<Track> trackList) {
+    public Genre(int id, String name) {
         if (!Genre.validateString(name)) {
             throw new IllegalArgumentException("Incorect GenreName");
         }
         this.id = new SimpleIntegerProperty(id);
         this.genreName = new SimpleStringProperty(name);
-        this.trackList = FXCollections.observableList(trackList);
     }
 
     public Genre(String name) {
