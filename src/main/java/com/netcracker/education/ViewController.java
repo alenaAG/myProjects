@@ -44,7 +44,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * @author 1
  */
 public class ViewController {
-    
+
     @FXML
     private TableView<Track> trackListTable;
     @FXML
@@ -57,7 +57,7 @@ public class ViewController {
     private TableColumn<Track, String> lengthColumn;
     @FXML
     private TableColumn<Track, String> genreColumn;
-    
+
     @FXML
     private TextField songNameField;
     @FXML
@@ -75,29 +75,15 @@ public class ViewController {
     @FXML
     private ListView<Genre> genreListView;
     @FXML
-    private Button addGenreButton;
-    @FXML
-    private Button editGenreButton;
-    @FXML
-    private Button deleteGenreButton;
-    @FXML
-    private Button okGenreButton;
-    @FXML
     private Button cancelButton;
     @FXML
     private TitledPane genresTitledPane;
-    
+
     private boolean addIsClicked = false;
     private boolean editIsClicked = false;
-    private boolean cancelIsClicked=false;
     private boolean okIsClicked = false;
-    private boolean okGenreButtonIsClicked = false;
-    private boolean addGenreButtonIsClicked;
-    private boolean editGenreButtonIsClicked;
-    private boolean deleteGenreButtonIsClicked;
-    private boolean cancelButtonIsClicked;
     private Control controller;
-    
+
     @FXML
     private void handleCancelButton() {
         songNameField.setEditable(false);
@@ -114,19 +100,14 @@ public class ViewController {
         albumField.setText("");
         lengthField.setText("");
         genreListView.getItems().clear();
+        this.genresTitledPane.setVisible(true);
     }
-    
-    @FXML
-    private void handleLibraryButton() {
-        genreListView.setItems(controller.GenreList());
-        trackListTable.getSelectionModel().clearSelection();
-    }
-    
+
     @FXML
     private void handleDeleteTrack() {
         int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            controller.delTrack(trackListTable.getItems().get(selectedIndex));
+            this.controller.delTrack(trackListTable.getItems().get(selectedIndex));
             trackListTable.refresh();
         } else {
             Alert alert = new Alert(AlertType.WARNING);
@@ -137,7 +118,7 @@ public class ViewController {
             alert.showAndWait();
         }
     }
-    
+
     @FXML
     private void handleAddTrack() {
         cancelButton.setVisible(true);
@@ -146,19 +127,20 @@ public class ViewController {
         artistField.setText("");
         albumField.setText("");
         lengthField.setText("");
-        genreListView.setItems(controller.GenreList());
+        //genreListView.setItems(controller.GenreList());
         songNameField.setEditable(true);
         artistField.setEditable(true);
         albumField.setEditable(true);
         lengthField.setEditable(true);
         okButton.setVisible(true);
+        this.genresTitledPane.setVisible(false);
     }
-    
+
     @FXML
     private void handleOkButton() {
         String errorMessage = "";
         boolean b = validateInput();
-        
+
         if (b) {
             try {
                 if (isAddClicked()) {
@@ -169,14 +151,14 @@ public class ViewController {
                         int genreId = genreListView.getSelectionModel().getSelectedItem().getId();
                         int trackId;
                         trackId = controller.TrackList().get(controller.TrackList().size() - 1).getId();
-                        addGenreToTrack(trackId, genreId);
+//                        addGenreToTrack(trackId, genreId);
                     }
                 } else {
                     if (isEditClicked()) {
                         int id = trackListTable.getSelectionModel().getSelectedItem().getId();
-                        
+
                         controller.editTrack(id, songNameField.getText(), artistField.getText(), albumField.getText(), parseLength(lengthField.getText()));
-                       
+
                     }
                 }
             } catch (AlreadyExistsException e) {
@@ -191,6 +173,8 @@ public class ViewController {
             addIsClicked = false;
             okIsClicked = false;
             cancelButton.setVisible(false);
+
+            this.genresTitledPane.setVisible(true);
             if (errorMessage.length() != 0) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("ERROR");
@@ -201,13 +185,14 @@ public class ViewController {
                 trackListTable.refresh();
             }
         }
-        
+
     }
-    
+
     @FXML
     private void handleEditTrack() {
         editIsClicked = true;
-        genreListView.getItems().clear();
+        this.genresTitledPane.setVisible(false);
+        //genreListView.getItems().clear();
         int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             songNameField.setEditable(true);
@@ -225,159 +210,29 @@ public class ViewController {
             alert.showAndWait();
         }
     }
-    
-    private void addGenreToTrack(int trackId, int genreId) {
-        String errorMessage = "";
-        try {
-            controller.getTrackById(trackId).addGenre(controller.getGenreById(genreId));
-        } catch (AlreadyExistsException e) {
-            errorMessage += "TrackAlready has this genre!\n";
-        }
-        if (errorMessage.length() != 0) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("Please choose another genre");
-            alert.setContentText(errorMessage);
-            alert.showAndWait();
-        }
-    }
-    
-    private void delGenreFromTrack(int trackId, int genreId) {
-        controller.getTrackById(trackId).delGenre(controller.getGenreById(genreId));
-    }
-    
+
     @FXML
     private void handleAddGenreButton() {
-        addGenreButtonIsClicked = true;
-        int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            okGenreButton.setVisible(true);
-            genreListView.setItems(controller.GenreList());
-        }
-    }
-    
-    @FXML
-    private void handleEditGenreButton() {
-        int selectedId = -1;
-        selectedId = genreListView.getSelectionModel().getSelectedItem().getId();
+        int selectedId = trackListTable.getSelectionModel().getSelectedItem().getId();
         if (selectedId >= 0) {
-            Genre tempGenre = new Genre();
-            boolean okClicked = view.showGenreEditDialog(tempGenre);
+            ObservableList<Genre> prevGenreList = controller.getTrackById(selectedId).getGenreListProperty();
+            boolean okClicked = view.showGenresDialog(controller.getTrackById(selectedId));
             if (okClicked) {
-                try {
-                    controller.editGenre(genreListView.getSelectionModel().getSelectedItem().getId(), tempGenre);
-                    genreListView.refresh();
-                } catch (AlreadyExistsException e) {
-                    Alert alert = new Alert(AlertType.WARNING);
-                    alert.initOwner(view.getPrimaryStage());
-                    alert.setTitle("ERROR");
-                    alert.setHeaderText("This genre already exists");
-                    alert.setContentText("Please enter another genre.");
-                    alert.showAndWait();
-                }
-            }
-        } else {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.initOwner(view.getPrimaryStage());
-            alert.setTitle("ERROR");
-            alert.setHeaderText("No Genre selected");
-            alert.setContentText("Please select a genre to edit.");
-            alert.showAndWait();
-        }
-    }
-    
-    @FXML
-    private void handleNewButton() {
-        Genre tempGenre = new Genre();
-        boolean okClicked = view.showGenreEditDialog(tempGenre);
-        if (okClicked) {
-            try {
-                controller.addGenre(tempGenre.getGenreName());
-            } catch (AlreadyExistsException e) {
-                Alert alert = new Alert(AlertType.WARNING);
-                alert.initOwner(view.getPrimaryStage());
-                alert.setTitle("ERROR");
-                alert.setHeaderText("This genre already exists");
-                alert.setContentText("Please enter another genre.");
-                alert.showAndWait();
-            }
-            
-        }
-        genreListView.setItems(controller.GenreList());
-    }
-    
-    @FXML
-    private void handleDeleteGenreButton() {
-        deleteGenreButtonIsClicked = true;
-        okGenreButton.setVisible(true);
-    }
-    
-    @FXML
-    private void handleOkGenreButton() {
-        if (addGenreButtonIsClicked) {
-            if (trackListTable.getSelectionModel().isEmpty()) {
+                selectedId = trackListTable.getSelectionModel().getSelectedItem().getId();
+                this.controller = view.Controller();
+                this.trackListTable.setItems(this.controller.TrackList());
+                this.genreListView.setItems(this.controller.getTrackById(selectedId).getGenreListProperty());
             } else {
-                int trackId = -7;
-                trackId = trackListTable.getSelectionModel().getSelectedItem().getId();
-                int genreId;
-                if (trackId >= 0) {
-                    genreId = genreListView.getSelectionModel().getSelectedItem().getId();
-                    addGenreToTrack(trackId, genreId);
-                    genreListView.setItems(trackListTable.getSelectionModel().getSelectedItem().getGenreListProperty());
-                } else {
-                    Alert alert = new Alert(AlertType.WARNING);
-                    alert.initOwner(view.getPrimaryStage());
-                    alert.setTitle("ERROR");
-                    alert.setHeaderText("No Track Selected");
-                    alert.setContentText("Please select a track in the table.");
-                    alert.showAndWait();
-                }
             }
-            addGenreButtonIsClicked = false;
-        } else {
-            if (deleteGenreButtonIsClicked) {
-                if (trackListTable.getSelectionModel().isEmpty()) {
-                    int genreId = genreListView.getSelectionModel().getSelectedItem().getId();
-                    if (genreId >= 0) {
-                        controller.delGenre(controller.getGenreById(genreId));
-                        trackListTable.setItems(controller.TrackList());
-                        genreListView.refresh();
-                    }
-                    
-                } else {
-                    int trackId = trackListTable.getSelectionModel().getSelectedItem().getId();
-                    int genreId;
-                    if (trackId >= 0) {
-                        genreId = genreListView.getSelectionModel().getSelectedItem().getId();
-                        if (genreId >= 0) {
-                            delGenreFromTrack(trackId, genreId);
-                            trackListTable.refresh();
-                            genreListView.setItems(trackListTable.getSelectionModel().getSelectedItem().getGenreListProperty());
-                        }
-                    } else {
-                        Alert alert = new Alert(AlertType.WARNING);
-                        alert.initOwner(view.getPrimaryStage());
-                        alert.setTitle("ERROR");
-                        alert.setHeaderText("No Track Selected");
-                        alert.setContentText("Please select a track in the table.");
-                        alert.showAndWait();
-                    }
-                }
-                deleteGenreButtonIsClicked = false;
-            }
+
         }
-        okGenreButtonIsClicked = false;
-        okGenreButton.setVisible(false);
-        deleteGenreButtonIsClicked=false;
-        addGenreButtonIsClicked=false;
-        
-        
     }
+
     private View view;
-    
+
     public ViewController() {
     }
-    
+
     @FXML
     public void initialize() {
         songNameColumn.setCellValueFactory(cellData -> cellData.getValue().getSongNameProperty());
@@ -386,19 +241,24 @@ public class ViewController {
         lengthColumn.setCellValueFactory(cellData -> cellData.getValue().getLengthStringProperty());
         showTrackDetails(null);
         trackListTable.getSelectionModel().selectedItemProperty().addListener((observale, oldValue, newValue) -> showTrackDetails(newValue));
-        
+
     }
-    
+
     public void setView(View view) {
         this.view = view;
-        controller = new Control(view.getTrackList(), view.getGenreList());
-        trackListTable.setItems(controller.TrackList());
-        genreListView.setItems(controller.GenreList());
+        this.controller = view.Controller();
+        trackListTable.setItems(this.controller.TrackList());
+        //genreListView.setItems(this.controller.GenreList());
     }
-    
-    public ObservableList<Track> getTrackLib(){return this.controller.TrackList();}
-    public ObservableList<Genre> getGenreLib(){return this.controller.GenreList();}
-    
+
+    public ObservableList<Track> getTrackLib() {
+        return this.controller.TrackList();
+    }
+
+    public ObservableList<Genre> getGenreLib() {
+        return this.controller.GenreList();
+    }
+
     private static boolean validateString(String s) {
         boolean b = true;
         if (s == null) {
@@ -415,10 +275,10 @@ public class ViewController {
         }
         return b;
     }
-    
+
     private boolean validateInput() {
         String errorMessage = "";
-        
+
         if (!validateString(songNameField.getText())) {
             errorMessage += "No valid song name!\n";
         }
@@ -428,17 +288,10 @@ public class ViewController {
         if (!validateString(albumField.getText())) {
             errorMessage += "No album name!\n";
         }
-        
+
         if (lengthField.getText() == null || lengthField.getText().length() == 0 || parseLength(lengthField.getText()) == null) {
             errorMessage += "No valid Length code!\n";
-        } /*else {
-         try {
-         parseLength(lengthField.getText());
-         } catch (Exception e) {
-         errorMessage += "No valid Length code!\n";
-         }
-         }*/
-
+        }
         if (errorMessage.length() == 0) {
             return true;
         } else {
@@ -449,9 +302,9 @@ public class ViewController {
             alert.showAndWait();
             return false;
         }
-        
+
     }
-    
+
     private void showTrackDetails(Track track) {
         if (track != null) {
             songNameField.setText(track.getSongName());
@@ -466,7 +319,7 @@ public class ViewController {
             lengthField.setText("");
         }
     }
-    
+
     private Duration parseLength(String s) {
         Duration duration = null;
         try {
@@ -478,20 +331,17 @@ public class ViewController {
         }
         return duration;
     }
-    
+
     public boolean isOkClicked() {
         return okIsClicked;
     }
-    
+
     public boolean isAddClicked() {
         return addIsClicked;
     }
-    
+
     public boolean isEditClicked() {
         return editIsClicked;
     }
-    
-    public boolean isCancelClicked() {
-        return cancelIsClicked;
-    }
+
 }

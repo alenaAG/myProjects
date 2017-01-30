@@ -6,4 +6,4 @@ Rock
 2
 NewMusic
 3
-Soul
+Ambient

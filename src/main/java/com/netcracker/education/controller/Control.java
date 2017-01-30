@@ -25,11 +25,11 @@ public class Control {
     }
 
     public ObservableList<Track> TrackList() {
-        return trackList;
+        return this.trackList;
     }
 
     public ObservableList<Genre> GenreList() {
-        return genreList;
+        return this.genreList;
     }
 
     public void editTrack(int id, String songName, String artist, String album, Duration length) throws AlreadyExistsException {
@@ -57,7 +57,7 @@ public class Control {
                 id = TrackList().get(TrackList().size() - 1).getId() + 1;
             }
             track.setId(id);
-            trackList.add(track);
+            this.trackList.add(track);
         }
 
     }
@@ -75,12 +75,12 @@ public class Control {
             }
             track.setId(id);
             track.setGenreList(genreList);
-            trackList.add(track);
+            this.trackList.add(track);
         }
     }
 
     public void delTrack(Track track) {
-        trackList.remove(track);
+        this.trackList.remove(track);
     }
 
     public void addGenre(String s) throws AlreadyExistsException {
@@ -105,7 +105,7 @@ public class Control {
     }
 
     public void delGenre(Genre genre) {
-        if (containsGenre(this.genreList,genre)) {
+        if (containsGenre(this.GenreList(),genre)) {
             this.genreList.remove(genre);
             for (Track track : this.trackList) {
                 if (containsGenre(track.getGenreListProperty(),genre)) {
@@ -125,7 +125,7 @@ public class Control {
 
     public void delGenre(String genreS) {
         Genre genre = new Genre(genreS);
-        if (containsGenre(GenreList(),genre)) {
+        if (containsGenre(this.GenreList(),genre)) {
            this.genreList.remove(genre);
             for (Track track : this.trackList) {
                 if (containsGenre(track.getGenreListProperty(),genre)) {
@@ -142,7 +142,7 @@ public class Control {
             if (containsGenre(FXCollections.observableList(TrackList().get(trackIndex).getGenreList()), GenreList().get(genreIndex))) {
                 throw new AlreadyExistsException("Track alreadi has this genre!");
             } else {
-                trackList.get(trackIndex).addGenre(GenreList().get(genreIndex));
+                this.trackList.get(trackIndex).addGenre(GenreList().get(genreIndex));
             }
         } catch (AlreadyExistsException e) {
             System.err.println(e.getMessage());
@@ -166,7 +166,7 @@ public class Control {
     }
 
     public Genre getGenreById(int id) {
-        for (Genre genre : genreList) {
+        for (Genre genre : this.genreList) {
             if (genre.getId() == id) {
                 return genre;
             }
@@ -175,7 +175,7 @@ public class Control {
     }
 
     public Track getTrackById(int id) {
-        for (Track track : trackList) {
+        for (Track track : this.trackList) {
             if (track.getId() == id) {
                 return track;
             }

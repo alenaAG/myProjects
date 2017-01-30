@@ -10,7 +10,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Genre implements Serializable{
+public class Genre implements Serializable, Cloneable {
 
     private IntegerProperty id;
     private StringProperty genreName;

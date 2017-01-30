@@ -10,6 +10,7 @@ import com.netcracker.education.model.Track;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -21,7 +22,6 @@ public class AddGenreController {
 
     @FXML
     private TextField genreNameField;
-
     private Stage dialogStage;
     private Genre genre;
     private boolean okClicked = false;

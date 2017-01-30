@@ -6,6 +6,7 @@ package com.netcracker.education.view;
  * and open the template in the editor.
  */
 import com.netcracker.education.AddGenreController;
+import com.netcracker.education.GenresController;
 import com.netcracker.education.ViewController;
 import com.netcracker.education.ViewController;
 import com.netcracker.education.controller.AlreadyExistsException;
@@ -127,6 +128,31 @@ public class View extends Application {
             return false;
         }
     }
+    public boolean showGenresDialog(Track track) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(View.class.getResource("../Genres.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Genres");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            GenresController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setViev(this);
+            controller.setGenresOfTrack(track);
+            controller.setGenresLibrary();
+            dialogStage.showAndWait();
+            this.controller=controller.getController();
+            return controller.isOkClicked();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
 
     public ObservableList<Track> getTrackList() {
         return this.trackList;
@@ -141,7 +167,6 @@ public class View extends Application {
         ArrayList<Genre> genreListTR1 = new ArrayList<>();
         ArrayList<Genre> genreListTR2 = new ArrayList<>();
 
-        controller = new Control(trackList, genreList);
         Duration duration = Duration.parse("PT2M3S");
         try {
             controller.addGenre("Pop");
@@ -176,19 +201,21 @@ public class View extends Application {
         try (Writer out = new FileWriter("GenreLib.txt")) {
             FileInOut.writeGenreLibrary(controller.GenreList(), out);
         } catch (IOException e) {
-        }
+        }*/
         
-*/
+
         try (Reader in = new FileReader("TrackLib.txt")) {
-            trackList = FXCollections.observableArrayList(FileInOut.readTrackLibrary(in));
+            this.trackList = FXCollections.observableArrayList(FileInOut.readTrackLibrary(in));
         } catch (IOException e) {
             System.err.print(e.getMessage());
         }
         try (Reader in = new FileReader("GenreLib.txt")) {
-            genreList = FXCollections.observableArrayList(FileInOut.readGenreLibrary(in));
+            this.genreList = FXCollections.observableArrayList(FileInOut.readGenreLibrary(in));
         } catch (IOException e) {
             System.err.print(e.getMessage());
         }
+        
+        controller = new Control(this.trackList, this.genreList);
     }
 
     
