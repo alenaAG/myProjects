@@ -109,7 +109,7 @@ public class ViewController {
     private void handleDeleteTrack() {
         if (this.getTrackLib().isEmpty()) {
         } else {
-            
+
             int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 this.controller.delTrack(trackListTable.getItems().get(selectedIndex));
@@ -165,10 +165,11 @@ public class ViewController {
                 } else {
                     if (isEditClicked()) {
                         int id = trackListTable.getSelectionModel().getSelectedItem().getId();
-                        Track track=trackListTable.getSelectionModel().getSelectedItem();
-                        if ((track.getSongName().equals(songNameField.getText()))&&(track.getArtist().equals(artistField.getText()))&&(track.getAlbum().equals(albumField.getText()))&&(track.getLength().equals(parseLength(lengthField.getText())))){}
-                        else
-                        controller.editTrack(id, songNameField.getText(), artistField.getText(), albumField.getText(), parseLength(lengthField.getText()));
+                        Track track = trackListTable.getSelectionModel().getSelectedItem();
+                        if ((track.getSongName().equals(songNameField.getText())) && (track.getArtist().equals(artistField.getText())) && (track.getAlbum().equals(albumField.getText())) && (track.getLength().equals(parseLength(lengthField.getText())))) {
+                        } else {
+                            controller.editTrack(id, songNameField.getText(), artistField.getText(), albumField.getText(), parseLength(lengthField.getText()));
+                        }
 
                     }
                 }
@@ -204,34 +205,43 @@ public class ViewController {
 
     @FXML
     private void handleEditTrack() {
-        addButton.setDisable(true);
-        deleteButton.setDisable(true);
-        editButton.setDisable(true);
-        editIsClicked = true;
-        this.genresTitledPane.setVisible(false);
-        int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            songNameField.setEditable(true);
-            artistField.setEditable(true);
-            albumField.setEditable(true);
-            lengthField.setEditable(true);
-            okButton.setVisible(true);
-            cancelButton.setVisible(true);
+        if (this.getTrackLib().isEmpty()) {
         } else {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.initOwner(view.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Track Selected");
-            alert.setContentText("Please select a track in the table.");
-            alert.showAndWait();
+
+            addButton.setDisable(true);
+            deleteButton.setDisable(true);
+            editButton.setDisable(true);
+            editIsClicked = true;
+
+            this.genresTitledPane.setVisible(false);
+
+            int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                songNameField.setEditable(true);
+                artistField.setEditable(true);
+                albumField.setEditable(true);
+                lengthField.setEditable(true);
+                okButton.setVisible(true);
+                cancelButton.setVisible(true);
+            } else {
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.initOwner(view.getPrimaryStage());
+                alert.setTitle("No Selection");
+                alert.setHeaderText("No Track Selected");
+                alert.setContentText("Please select a track in the table.");
+                alert.showAndWait();
+                addButton.setDisable(false);
+                deleteButton.setDisable(false);
+                editButton.setDisable(false);
+            }
         }
     }
-
+ 
     @FXML
     private void handleAddGenreButton() {
         if (this.getTrackLib().isEmpty()) {
         } else {
-            int selectedIndex=trackListTable.getSelectionModel().getSelectedIndex();
+            int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 int selectedId = trackListTable.getSelectionModel().getSelectedItem().getId();
                 ObservableList<Genre> prevGenreList = controller.getTrackById(selectedId).getGenreListProperty();
@@ -244,14 +254,14 @@ public class ViewController {
                 } else {
                 }
 
+            } else {
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.initOwner(view.getPrimaryStage());
+                alert.setTitle("No Selection");
+                alert.setHeaderText("No Track Selected");
+                alert.setContentText("Please select a track in the table.");
+                alert.showAndWait();
             }
-            else{
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.initOwner(view.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Track Selected");
-            alert.setContentText("Please select a track in the table.");
-            alert.showAndWait();}
         }
     }
 
@@ -350,13 +360,13 @@ public class ViewController {
     private Duration parseLength(String s) {
         Duration duration = null;
         try {
-            
+
             String[] hmnArray = s.split(":", 3);
-            if ((Integer.parseInt(hmnArray[0])<0)||(Integer.parseInt(hmnArray[1])<0)||(Integer.parseInt(hmnArray[2])<0)){}
-            else{            
-            duration = Duration.ofHours(Integer.parseInt(hmnArray[0]));
-            duration = duration.plus(Duration.ofMinutes(Integer.parseInt(hmnArray[1])));
-            duration = duration.plus(Duration.ofSeconds(Integer.parseInt(hmnArray[2])));
+            if ((Integer.parseInt(hmnArray[0]) < 0) || (Integer.parseInt(hmnArray[1]) < 0) || (Integer.parseInt(hmnArray[2]) < 0)) {
+            } else {
+                duration = Duration.ofHours(Integer.parseInt(hmnArray[0]));
+                duration = duration.plus(Duration.ofMinutes(Integer.parseInt(hmnArray[1])));
+                duration = duration.plus(Duration.ofSeconds(Integer.parseInt(hmnArray[2])));
             }
         } catch (Exception e) {
         }

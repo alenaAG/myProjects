@@ -26,6 +26,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.stage.Stage;
@@ -79,7 +80,6 @@ public class GenresController {
     @FXML
     private void handleNewButton() {
         Genre tempGenre = new Genre();
-        
         newGenreButton.setDisable(true);
         deleteGenreButton.setDisable(true);
         editGenreButton.setDisable(true);
@@ -139,6 +139,32 @@ public class GenresController {
             }
         }));
     }
+    public void setGenresEditLibrary() {
+        this.genresLibrary = this.controller.GenreList();
+        this.genreLibraryView.setItems(this.controller.GenreList());
+        this.deleteGenreButton.setVisible(true);
+        this.editGenreButton.setVisible(true);
+       this.genreLibraryView.setCellFactory(new Callback<ListView<Genre>, ListCell<Genre>>() {
+
+            @Override
+            public ListCell<Genre> call(ListView<Genre> param) {
+                ListCell<Genre> cell = new ListCell<Genre>() {
+
+                    @Override
+                    protected void updateItem(Genre item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item != null) {
+                            setText(item.getGenreName());
+                        } else {
+                            setText("");
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+
+    }
 
     public boolean containsGenre(ObservableList<Genre> genreList, Genre genre) {
         if (genreList.isEmpty()) {
@@ -189,7 +215,7 @@ public class GenresController {
 
                 int genreId = this.genreLibraryView.getSelectionModel().getSelectedItem().getId();
                 this.controller.delGenre(this.controller.getGenreById(genreId).getGenreName());
-                this.setGenresLibrary();
+                this.setGenresEditLibrary();
 
             }
             deleteGenreButton.setDisable(false);
@@ -215,7 +241,7 @@ public class GenresController {
                 if (okClicked) {
                     try {
                         this.controller.editGenre(this.genreLibraryView.getSelectionModel().getSelectedItem().getId(), tempGenre);
-                        this.setGenresLibrary();
+                        this.setGenresEditLibrary();
                     } catch (AlreadyExistsException e) {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.initOwner(view.getPrimaryStage());
@@ -240,7 +266,7 @@ public class GenresController {
         if (okClicked) {
             try {
                 this.controller.addGenre(tempGenre.getGenreName());
-                this.setGenresLibrary();
+                if (!(track==null))this.setGenresLibrary();else this.setGenresEditLibrary();
             } catch (AlreadyExistsException e) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.initOwner(view.getPrimaryStage());
@@ -255,10 +281,13 @@ public class GenresController {
     }
 
     public void setGenresOfTrack(Track track) {
+        this.deleteGenreButton.setVisible(false);
+        this.editGenreButton.setVisible(false);
         this.genresOfTrack = (ObservableList<Genre>) track.getGenreList();
         this.track = track;
         this.trackBefore = new Track(track.getId(), track.getSongName(), track.getArtist(), track.getAlbum(), track.getLength(), track.getGenreList());
 
     }
+    
 
 }

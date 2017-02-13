@@ -7,6 +7,7 @@ package com.netcracker.education.view;
  */
 import com.netcracker.education.AddGenreController;
 import com.netcracker.education.GenresController;
+import com.netcracker.education.RootLayoutController;
 import com.netcracker.education.ViewController;
 import com.netcracker.education.ViewController;
 import com.netcracker.education.controller.AlreadyExistsException;
@@ -84,6 +85,8 @@ public class View extends Application {
             loader.setLocation(View.class.getResource("../RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
             Scene scene = new Scene(rootLayout);
+            RootLayoutController controller = loader.getController();
+            controller.setViev(this);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
@@ -92,6 +95,10 @@ public class View extends Application {
 
     }
 
+    public void update()
+    {
+            viewController.setView(this);
+    }
     public void showTrackLibrary() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -128,6 +135,7 @@ public class View extends Application {
             return false;
         }
     }
+
     public boolean showGenresDialog(Track track) {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -142,17 +150,21 @@ public class View extends Application {
             GenresController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setViev(this);
-            controller.setGenresOfTrack(track);
-            controller.setGenresLibrary();
-            dialogStage.showAndWait();
-            this.controller=controller.getController();
+            if (track == null) {
+                controller.setGenresEditLibrary();
+                dialogStage.showAndWait();
+            } else {
+                controller.setGenresOfTrack(track);
+                controller.setGenresLibrary();
+                dialogStage.showAndWait();
+            }
+            this.controller = controller.getController();
             return controller.isOkClicked();
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
-    
 
     public ObservableList<Track> getTrackList() {
         return this.trackList;
@@ -164,45 +176,44 @@ public class View extends Application {
 
     public View() {
         /*
-        ArrayList<Genre> genreListTR1 = new ArrayList<>();
-        ArrayList<Genre> genreListTR2 = new ArrayList<>();
+         ArrayList<Genre> genreListTR1 = new ArrayList<>();
+         ArrayList<Genre> genreListTR2 = new ArrayList<>();
 
-        Duration duration = Duration.parse("PT2M3S");
-        try {
-            controller.addGenre("Pop");
-            controller.addGenre("Rock");
-            controller.addGenre("NewMusic");
-            controller.addGenre("Ambient");
-            controller.addTrack("In NY", "JAY-Z", "NY", duration, genreListTR1);
-            controller.addTrack("Too Good", "Drake", "Good", duration, genreListTR2);
-            controller.addTrack("Fine", "Drake", "Good", duration);
-            controller.addTrack("Damn", "Damn", "Bad", duration);
-            controller.addTrack("Anapa", "YOYO", "Anapa", duration);
+         Duration duration = Duration.parse("PT2M3S");
+         try {
+         controller.addGenre("Pop");
+         controller.addGenre("Rock");
+         controller.addGenre("NewMusic");
+         controller.addGenre("Ambient");
+         controller.addTrack("In NY", "JAY-Z", "NY", duration, genreListTR1);
+         controller.addTrack("Too Good", "Drake", "Good", duration, genreListTR2);
+         controller.addTrack("Fine", "Drake", "Good", duration);
+         controller.addTrack("Damn", "Damn", "Bad", duration);
+         controller.addTrack("Anapa", "YOYO", "Anapa", duration);
 
-            controller.addGenreToTrack(0, 1);
-            controller.addGenreToTrack(0, 2);
-            controller.addGenreToTrack(1, 1);
-            List<Track> newTrL = new ArrayList();
-            List<Genre> newGnL = new ArrayList();
+         controller.addGenreToTrack(0, 1);
+         controller.addGenreToTrack(0, 2);
+         controller.addGenreToTrack(1, 1);
+         List<Track> newTrL = new ArrayList();
+         List<Genre> newGnL = new ArrayList();
 
-            System.out.println("Reader result:");
-            System.out.println(newTrL.toString());
-            System.out.println(newGnL.toString());
-            trackList = (ObservableList<Track>) controller.TrackList();
-            genreList = (ObservableList<Genre>) controller.GenreList();
-        } catch (AlreadyExistsException e) {
-            e.printStackTrace();
-        }
+         System.out.println("Reader result:");
+         System.out.println(newTrL.toString());
+         System.out.println(newGnL.toString());
+         trackList = (ObservableList<Track>) controller.TrackList();
+         genreList = (ObservableList<Genre>) controller.GenreList();
+         } catch (AlreadyExistsException e) {
+         e.printStackTrace();
+         }
         
-        try (Writer out = new FileWriter("TrackLib.txt")) {
-            FileInOut.writeLibrary(controller.TrackList(), out);
-        } catch (IOException e) {
-        }
-        try (Writer out = new FileWriter("GenreLib.txt")) {
-            FileInOut.writeGenreLibrary(controller.GenreList(), out);
-        } catch (IOException e) {
-        }*/
-        
+         try (Writer out = new FileWriter("TrackLib.txt")) {
+         FileInOut.writeLibrary(controller.TrackList(), out);
+         } catch (IOException e) {
+         }
+         try (Writer out = new FileWriter("GenreLib.txt")) {
+         FileInOut.writeGenreLibrary(controller.GenreList(), out);
+         } catch (IOException e) {
+         }*/
 
         try (Reader in = new FileReader("TrackLib.txt")) {
             this.trackList = FXCollections.observableArrayList(FileInOut.readTrackLibrary(in));
@@ -214,17 +225,15 @@ public class View extends Application {
         } catch (IOException e) {
             System.err.print(e.getMessage());
         }
-        
+
         controller = new Control(this.trackList, this.genreList);
     }
 
-    
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
-     public Stage getPrimaryStage() {
-     return primaryStage;
-     }
-
-     /**
+    /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
