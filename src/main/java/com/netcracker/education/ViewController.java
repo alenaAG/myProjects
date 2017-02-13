@@ -97,23 +97,25 @@ public class ViewController {
         addIsClicked = false;
         okIsClicked = false;
         cancelButton.setVisible(false);
-        songNameField.setText("");
-        artistField.setText("");
-        albumField.setText("");
-        lengthField.setText("");
-        genreListView.getItems().clear();
         this.genresTitledPane.setVisible(true);
+        deleteButton.setDisable(false);
+        editButton.setDisable(false);
+        addButton.setDisable(false);
+        if (this.getTrackLib().isEmpty())this.genreListView.getItems().clear();
+        else
+        this.showTrackDetails(this.controller.getTrackById(this.trackListTable.getSelectionModel().getSelectedItem().getId()));
     }
 
     @FXML
     private void handleDeleteTrack() {
-        if (this.getTrackLib().isEmpty()) {
+        if (this.getTrackLib().isEmpty()) {this.genreListView.getItems().clear();
         } else {
 
             int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 this.controller.delTrack(trackListTable.getItems().get(selectedIndex));
                 trackListTable.refresh();
+                this.genreListView.getItems().clear();
             } else {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.initOwner(view.getPrimaryStage());
@@ -236,7 +238,7 @@ public class ViewController {
             }
         }
     }
- 
+
     @FXML
     private void handleAddGenreButton() {
         if (this.getTrackLib().isEmpty()) {
