@@ -13,6 +13,7 @@ import com.netcracker.education.view.View;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
@@ -23,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.CheckBoxListCell;
@@ -39,6 +41,13 @@ public class GenresController {
 
     @FXML
     private ListView<Genre> genreLibraryView;
+    @FXML
+    private Button editGenreButton;
+    @FXML
+    private Button deleteGenreButton;
+    @FXML
+    private Button newGenreButton;
+
     private boolean okClicked = false;
     private Track trackBefore;
     private Track track;
@@ -48,8 +57,10 @@ public class GenresController {
 
     public GenresController() {
     }
-    public Control getController()
-    {return this.controller;}
+
+    public Control getController() {
+        return this.controller;
+    }
 
     public boolean isOkClicked() {
         return okClicked;
@@ -65,10 +76,13 @@ public class GenresController {
         this.controller = view.Controller();
     }
 
-
     @FXML
     private void handleNewButton() {
         Genre tempGenre = new Genre();
+        
+        newGenreButton.setDisable(true);
+        deleteGenreButton.setDisable(true);
+        editGenreButton.setDisable(true);
         boolean okClicked = view.showGenreEditDialog(tempGenre);
         if (okClicked) {
             try {
@@ -83,6 +97,9 @@ public class GenresController {
             }
 
         }
+        deleteGenreButton.setDisable(false);
+        editGenreButton.setDisable(false);
+        newGenreButton.setDisable(false);
 
     }
 
@@ -144,27 +161,41 @@ public class GenresController {
     private void handleOkButton() {
 
         okClicked = true;
-        
+
         dialogStage.close();
 
     }
 
-   /* @FXML
-    private void handleCancelButton() {
-        this.track = this.trackBefore;
-        dialogStage.close();
+    /* @FXML
+     private void handleCancelButton() {
+     this.track = this.trackBefore;
+     dialogStage.close();
         
 
-    }*/
-
+     }*/
     @FXML
     private void handleDeleteGenreButton() {
         if (this.genreLibraryView.getSelectionModel().isEmpty()) {
         } else {
-            int genreId = this.genreLibraryView.getSelectionModel().getSelectedItem().getId();
-            this.controller.delGenre(this.controller.getGenreById(genreId).getGenreName());
-            this.setGenresLibrary();
-            
+            deleteGenreButton.setDisable(true);
+            editGenreButton.setDisable(true);
+            newGenreButton.setDisable(true);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.initOwner(view.getPrimaryStage());
+            alert.setTitle("ATTENTION");
+            alert.setContentText("You are deleting this genre from ALL tracks");
+            Optional<ButtonType> result = alert.showAndWait();
+            if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+
+                int genreId = this.genreLibraryView.getSelectionModel().getSelectedItem().getId();
+                this.controller.delGenre(this.controller.getGenreById(genreId).getGenreName());
+                this.setGenresLibrary();
+
+            }
+            deleteGenreButton.setDisable(false);
+            editGenreButton.setDisable(false);
+            newGenreButton.setDisable(false);
+
         }
 
     }
@@ -172,25 +203,33 @@ public class GenresController {
     @FXML
     private void handleEditGenreButton() {
         int selectedId = -1;
-        selectedId = this.genreLibraryView.getSelectionModel().getSelectedItem().getId();
-        if (selectedId >= 0) {
-            Genre tempGenre = new Genre();
-            boolean okClicked = view.showGenreEditDialog(tempGenre);
-            if (okClicked) {
-                try {
-                    this.controller.editGenre(this.genreLibraryView.getSelectionModel().getSelectedItem().getId(), tempGenre);
-                    this.setGenresLibrary();
-                } catch (AlreadyExistsException e) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.initOwner(view.getPrimaryStage());
-                    alert.setTitle("ERROR");
-                    alert.setHeaderText("This genre already exists");
-                    alert.setContentText("Please enter another genre.");
-                    alert.showAndWait();
+        if (this.genreLibraryView.getSelectionModel().getSelectedIndex() >= 0) {
+            deleteGenreButton.setDisable(true);
+            editGenreButton.setDisable(true);
+            newGenreButton.setDisable(true);
+            selectedId = this.genreLibraryView.getSelectionModel().getSelectedItem().getId();
+            if (selectedId >= 0) {
+                Genre tempGenre = new Genre();
+                tempGenre.setGenreName(this.genreLibraryView.getSelectionModel().getSelectedItem().getGenreName());
+                boolean okClicked = view.showGenreEditDialog(tempGenre);
+                if (okClicked) {
+                    try {
+                        this.controller.editGenre(this.genreLibraryView.getSelectionModel().getSelectedItem().getId(), tempGenre);
+                        this.setGenresLibrary();
+                    } catch (AlreadyExistsException e) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.initOwner(view.getPrimaryStage());
+                        alert.setTitle("ERROR");
+                        alert.setHeaderText("This genre already exists");
+                        alert.setContentText("Please enter another genre.");
+                        alert.showAndWait();
+                    }
                 }
+            } else {
             }
-        } else {
-            
+            deleteGenreButton.setDisable(false);
+            editGenreButton.setDisable(false);
+            newGenreButton.setDisable(false);
         }
     }
 

@@ -1,9 +1,11 @@
-4
-0
-Pop
+5
 1
 Rock
 2
-NewMusic
-3
 Ambient
+3
+Russian
+4
+HipHop
+5
+Rock'n'roll

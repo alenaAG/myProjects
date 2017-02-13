@@ -114,8 +114,8 @@ public class View extends Application {
             AnchorPane page = (AnchorPane) loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Edit Genre");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.initOwner(primaryStage.getScene().getWindow());
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
             AddGenreController controller = loader.getController();
@@ -135,8 +135,8 @@ public class View extends Application {
             AnchorPane page = (AnchorPane) loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Genres");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.initOwner(primaryStage.getScene().getWindow());
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
             GenresController controller = loader.getController();
