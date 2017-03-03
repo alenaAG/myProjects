@@ -34,7 +34,7 @@ public class FileInOut {
 
         }
         buildingOut.append(s);
-        buildingOut.close();
+       buildingOut.close();
     }
 
     public static void writeGenreLibrary(List<Genre> list, Writer out) throws IOException {
@@ -82,7 +82,7 @@ public class FileInOut {
             }
             list.add(new Track(id, songName, artist, album, duration, genreList));
         }
-        in.close();
+        listIn.close();
         return list;
     }
 
@@ -99,7 +99,7 @@ public class FileInOut {
             genreName = (String) listIn.next();
             list.add(new Genre(genreId, genreName));
         }
-        in.close();
+        listIn.close();
         return list;
     }
 

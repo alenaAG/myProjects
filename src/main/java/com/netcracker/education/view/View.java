@@ -15,11 +15,13 @@ import com.netcracker.education.controller.Control;
 import com.netcracker.education.controller.FileInOut;
 import com.netcracker.education.model.Genre;
 import com.netcracker.education.model.Track;
+import com.netcracker.education.net.SerialClient;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.Socket;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -46,12 +48,13 @@ import javafx.stage.WindowEvent;
 public class View extends Application {
 
     private Stage primaryStage;
+    public static Socket client;
     private BorderPane rootLayout;
     private AnchorPane centerLayout;
 
-    private ObservableList<Track> trackList = FXCollections.observableArrayList();
-    private ObservableList<Genre> genreList = FXCollections.observableArrayList();
-    private Control controller;
+    private static ObservableList<Track> trackList = FXCollections.observableArrayList();
+    private static ObservableList<Genre> genreList = FXCollections.observableArrayList();
+    private static Control controller;
     private ViewController viewController;
 
     @Override
@@ -63,14 +66,16 @@ public class View extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 System.out.println("Stage is closing");
-                try (Writer out = new FileWriter("TrackLib.txt")) {
+                SerialClient.setMessage(-1, null, 1);
+                /*try (Writer out = new FileWriter("TrackLib.txt")) {
                     FileInOut.writeLibrary(viewController.getTrackLib(), out);
                 } catch (IOException e) {
                 }
                 try (Writer out = new FileWriter("GenreLib.txt")) {
                     FileInOut.writeGenreLibrary(viewController.getGenreLib(), out);
                 } catch (IOException e) {
-                }
+                }*/
+                
             }
         });
     }
@@ -106,6 +111,7 @@ public class View extends Application {
             AnchorPane trackLibrary;
             trackLibrary = (AnchorPane) loader.load();
             rootLayout.setCenter(trackLibrary);
+            trackLibrary.setPrefSize(800, 600);
             this.viewController = loader.getController();
             viewController.setView(this);
 
@@ -173,60 +179,17 @@ public class View extends Application {
     public ObservableList<Genre> getGenreList() {
         return this.genreList;
     }
+    public static void setClient(Socket client,Control controller){
+        View.client=client;
+        View.controller=controller;
+        View.trackList=View.controller.TrackList();
+        View.genreList=View.controller.GenreList();
+        
+        
+    }
+    
 
     public View() {
-        /*
-         ArrayList<Genre> genreListTR1 = new ArrayList<>();
-         ArrayList<Genre> genreListTR2 = new ArrayList<>();
-
-         Duration duration = Duration.parse("PT2M3S");
-         try {
-         controller.addGenre("Pop");
-         controller.addGenre("Rock");
-         controller.addGenre("NewMusic");
-         controller.addGenre("Ambient");
-         controller.addTrack("In NY", "JAY-Z", "NY", duration, genreListTR1);
-         controller.addTrack("Too Good", "Drake", "Good", duration, genreListTR2);
-         controller.addTrack("Fine", "Drake", "Good", duration);
-         controller.addTrack("Damn", "Damn", "Bad", duration);
-         controller.addTrack("Anapa", "YOYO", "Anapa", duration);
-
-         controller.addGenreToTrack(0, 1);
-         controller.addGenreToTrack(0, 2);
-         controller.addGenreToTrack(1, 1);
-         List<Track> newTrL = new ArrayList();
-         List<Genre> newGnL = new ArrayList();
-
-         System.out.println("Reader result:");
-         System.out.println(newTrL.toString());
-         System.out.println(newGnL.toString());
-         trackList = (ObservableList<Track>) controller.TrackList();
-         genreList = (ObservableList<Genre>) controller.GenreList();
-         } catch (AlreadyExistsException e) {
-         e.printStackTrace();
-         }
-        
-         try (Writer out = new FileWriter("TrackLib.txt")) {
-         FileInOut.writeLibrary(controller.TrackList(), out);
-         } catch (IOException e) {
-         }
-         try (Writer out = new FileWriter("GenreLib.txt")) {
-         FileInOut.writeGenreLibrary(controller.GenreList(), out);
-         } catch (IOException e) {
-         }*/
-
-        try (Reader in = new FileReader("TrackLib.txt")) {
-            this.trackList = FXCollections.observableArrayList(FileInOut.readTrackLibrary(in));
-        } catch (IOException e) {
-            System.err.print(e.getMessage());
-        }
-        try (Reader in = new FileReader("GenreLib.txt")) {
-            this.genreList = FXCollections.observableArrayList(FileInOut.readGenreLibrary(in));
-        } catch (IOException e) {
-            System.err.print(e.getMessage());
-        }
-
-        controller = new Control(this.trackList, this.genreList);
     }
 
     public Stage getPrimaryStage() {
@@ -237,6 +200,7 @@ public class View extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+               
         launch(args);
     }
 

@@ -10,6 +10,7 @@ import com.netcracker.education.controller.Control;
 import com.netcracker.education.model.Genre;
 import com.netcracker.education.view.View;
 import com.netcracker.education.model.Track;
+import com.netcracker.education.net.SerialClient;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -101,21 +102,30 @@ public class ViewController {
         deleteButton.setDisable(false);
         editButton.setDisable(false);
         addButton.setDisable(false);
-        if (this.getTrackLib().isEmpty())this.genreListView.getItems().clear();
-        else
-        this.showTrackDetails(this.controller.getTrackById(this.trackListTable.getSelectionModel().getSelectedItem().getId()));
+        if (this.getTrackLib().isEmpty()) {
+            this.genreListView.getItems().clear();
+        } else {
+            this.showTrackDetails(this.controller.getTrackById(this.trackListTable.getSelectionModel().getSelectedItem().getId()));
+        }
     }
 
     @FXML
     private void handleDeleteTrack() {
-        if (this.getTrackLib().isEmpty()) {this.genreListView.getItems().clear();
+        if (this.getTrackLib().isEmpty()) {
+            this.genreListView.getItems().clear();
         } else {
 
             int selectedIndex = trackListTable.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
-                this.controller.delTrack(trackListTable.getItems().get(selectedIndex));
-                trackListTable.refresh();
-                this.genreListView.getItems().clear();
+                SerialClient.setMessage(1, null, trackListTable.getItems().get(selectedIndex).getId());
+                if (SerialClient.getMessage().getException() == null) {
+                    view.update();
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.initOwner(view.getPrimaryStage());
+                    alert.setTitle("Server error");
+                    alert.showAndWait();
+                }
             } else {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.initOwner(view.getPrimaryStage());
@@ -138,7 +148,6 @@ public class ViewController {
         artistField.setText("");
         albumField.setText("");
         lengthField.setText("");
-        //genreListView.setItems(controller.GenreList());
         songNameField.setEditable(true);
         artistField.setEditable(true);
         albumField.setEditable(true);
@@ -153,30 +162,39 @@ public class ViewController {
         boolean b = validateInput();
 
         if (b) {
-            try {
-                if (isAddClicked()) {
-                    int genreSelectedIndex = -1;
-                    genreSelectedIndex = genreListView.getSelectionModel().getSelectedIndex();
-                    controller.addTrack(songNameField.getText(), artistField.getText(), albumField.getText(), parseLength(lengthField.getText()));
-                    if (genreSelectedIndex != -1) {
-                        int genreId = genreListView.getSelectionModel().getSelectedItem().getId();
-                        int trackId;
-                        trackId = controller.TrackList().get(controller.TrackList().size() - 1).getId();
-//                        addGenreToTrack(trackId, genreId);
-                    }
+            if (isAddClicked()) {
+                int genreSelectedIndex = -1;
+                genreSelectedIndex = genreListView.getSelectionModel().getSelectedIndex();
+                SerialClient.setMessage(2, null, songNameField.getText(), artistField.getText(), albumField.getText(), parseLength(lengthField.getText()));
+                if (SerialClient.getMessage().getException() == null) {
+                    view.update();
                 } else {
-                    if (isEditClicked()) {
-                        int id = trackListTable.getSelectionModel().getSelectedItem().getId();
-                        Track track = trackListTable.getSelectionModel().getSelectedItem();
-                        if ((track.getSongName().equals(songNameField.getText())) && (track.getArtist().equals(artistField.getText())) && (track.getAlbum().equals(albumField.getText())) && (track.getLength().equals(parseLength(lengthField.getText())))) {
-                        } else {
-                            controller.editTrack(id, songNameField.getText(), artistField.getText(), albumField.getText(), parseLength(lengthField.getText()));
-                        }
 
-                    }
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.initOwner(view.getPrimaryStage());
+                    alert.setContentText("Track Already Exists");
+                    alert.showAndWait();
                 }
-            } catch (AlreadyExistsException e) {
-                errorMessage += "TrackAlready has this genre!\n";
+
+            } else {
+                if (isEditClicked()) {
+                    int id = trackListTable.getSelectionModel().getSelectedItem().getId();
+                    Track track = trackListTable.getSelectionModel().getSelectedItem();
+                    if ((track.getSongName().equals(songNameField.getText())) && (track.getArtist().equals(artistField.getText())) && (track.getAlbum().equals(albumField.getText())) && (track.getLength().equals(parseLength(lengthField.getText())))) {
+                        errorMessage += "You cannot add the same track\n";
+                    } else {
+                        SerialClient.setMessage(3, null, id, songNameField.getText(), artistField.getText(), albumField.getText(), parseLength(lengthField.getText()));
+                        if (SerialClient.getMessage().getException() == null) {
+                            view.update();
+                        } else {
+                            Alert alert = new Alert(AlertType.ERROR);
+                            alert.initOwner(view.getPrimaryStage());
+                            alert.setContentText("Track Already Exists");
+                            alert.showAndWait();
+                        }
+                    }
+
+                }
             }
             deleteButton.setDisable(false);
             editButton.setDisable(false);
@@ -195,7 +213,6 @@ public class ViewController {
             if (errorMessage.length() != 0) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("ERROR");
-                alert.setHeaderText("Track Already Exists");
                 alert.setContentText(errorMessage);
                 alert.showAndWait();
             } else {
@@ -278,7 +295,6 @@ public class ViewController {
         artistColumn.setCellValueFactory(cellData -> cellData.getValue().getArtistProperty());
         albumColumn.setCellValueFactory(cellData -> cellData.getValue().getAlbumProperty());
         lengthColumn.setCellValueFactory(cellData -> cellData.getValue().getLengthStringProperty());
-        showTrackDetails(null);
         trackListTable.getSelectionModel().selectedItemProperty().addListener((observale, oldValue, newValue) -> showTrackDetails(newValue));
 
     }
@@ -287,7 +303,8 @@ public class ViewController {
         this.view = view;
         this.controller = view.Controller();
         trackListTable.setItems(this.controller.TrackList());
-        //genreListView.setItems(this.controller.GenreList());
+        showTrackDetails(null);
+        genreListView.getItems().clear();
     }
 
     public ObservableList<Track> getTrackLib() {
@@ -356,6 +373,7 @@ public class ViewController {
             artistField.setText("");
             albumField.setText("");
             lengthField.setText("");
+
         }
     }
 

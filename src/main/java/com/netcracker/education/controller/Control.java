@@ -7,6 +7,7 @@ package com.netcracker.education.controller;
 
 import com.netcracker.education.model.*;
 import com.netcracker.education.model.Track;
+import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +15,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Control {
+public class Control implements Serializable{
 
     private ObservableList<Track> trackList = FXCollections.observableArrayList(new ArrayList());
     private ObservableList<Genre> genreList = FXCollections.observableArrayList(new ArrayList());
