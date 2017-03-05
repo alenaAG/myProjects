@@ -120,6 +120,7 @@ public class ViewController {
                 SerialClient.setMessage(1, null, trackListTable.getItems().get(selectedIndex).getId());
                 if (SerialClient.getMessage().getException() == null) {
                     view.update();
+                    this.genreListView.getItems().clear();
                 } else {
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.initOwner(view.getPrimaryStage());
@@ -168,6 +169,8 @@ public class ViewController {
                 SerialClient.setMessage(2, null, songNameField.getText(), artistField.getText(), albumField.getText(), parseLength(lengthField.getText()));
                 if (SerialClient.getMessage().getException() == null) {
                     view.update();
+                    this.genreListView.setItems(FXCollections.observableArrayList(new ArrayList<Genre>()));
+                    
                 } else {
 
                     Alert alert = new Alert(AlertType.ERROR);
@@ -186,6 +189,7 @@ public class ViewController {
                         SerialClient.setMessage(3, null, id, songNameField.getText(), artistField.getText(), albumField.getText(), parseLength(lengthField.getText()));
                         if (SerialClient.getMessage().getException() == null) {
                             view.update();
+                            showTrackDetails(this.controller.getTrackById(id));
                         } else {
                             Alert alert = new Alert(AlertType.ERROR);
                             alert.initOwner(view.getPrimaryStage());
@@ -266,9 +270,9 @@ public class ViewController {
                 ObservableList<Genre> prevGenreList = controller.getTrackById(selectedId).getGenreListProperty();
                 boolean okClicked = view.showGenresDialog(controller.getTrackById(selectedId));
                 if (okClicked) {
-                    selectedId = trackListTable.getSelectionModel().getSelectedItem().getId();
-                    this.controller = view.Controller();
-                    this.trackListTable.setItems(this.controller.TrackList());
+                    view.update();
+                    //this.trackListTable.setItems(this.controller.TrackList());
+                    showTrackDetails(this.controller.getTrackById(selectedId));
                     this.genreListView.setItems(this.controller.getTrackById(selectedId).getGenreListProperty());
                 } else {
                 }
@@ -295,6 +299,7 @@ public class ViewController {
         artistColumn.setCellValueFactory(cellData -> cellData.getValue().getArtistProperty());
         albumColumn.setCellValueFactory(cellData -> cellData.getValue().getAlbumProperty());
         lengthColumn.setCellValueFactory(cellData -> cellData.getValue().getLengthStringProperty());
+
         trackListTable.getSelectionModel().selectedItemProperty().addListener((observale, oldValue, newValue) -> showTrackDetails(newValue));
 
     }
@@ -303,8 +308,8 @@ public class ViewController {
         this.view = view;
         this.controller = view.Controller();
         trackListTable.setItems(this.controller.TrackList());
-        showTrackDetails(null);
-        genreListView.getItems().clear();
+      //  showTrackDetails(null);
+      //  genreListView.getItems().clear();
     }
 
     public ObservableList<Track> getTrackLib() {
@@ -363,6 +368,7 @@ public class ViewController {
 
     private void showTrackDetails(Track track) {
         if (track != null) {
+            view.update();
             songNameField.setText(track.getSongName());
             artistField.setText(track.getArtist());
             albumField.setText(track.getAlbum());

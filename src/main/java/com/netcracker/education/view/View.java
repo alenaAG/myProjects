@@ -56,6 +56,8 @@ public class View extends Application {
     private static ObservableList<Genre> genreList = FXCollections.observableArrayList();
     private static Control controller;
     private ViewController viewController;
+    private GenresController genresController;
+    
 
     @Override
     public void start(Stage primaryStage) {
@@ -103,6 +105,11 @@ public class View extends Application {
     public void update()
     {
             viewController.setView(this);
+            
+            
+    }
+    public void updateG()
+    {genresController.setViev(this);
     }
     public void showTrackLibrary() {
         try {
@@ -153,19 +160,20 @@ public class View extends Application {
             dialogStage.initOwner(primaryStage.getScene().getWindow());
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
-            GenresController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setViev(this);
+            this.genresController = loader.getController();
+            this.genresController.setDialogStage(dialogStage);
+           this.genresController.setViev(this);
             if (track == null) {
-                controller.setGenresEditLibrary();
+                this.genresController.setGenresEditLibrary();
+                this.update();
                 dialogStage.showAndWait();
             } else {
-                controller.setGenresOfTrack(track);
-                controller.setGenresLibrary();
+                this.genresController.setGenresOfTrack(track);
+                this.genresController.setGenresLibrary();
                 dialogStage.showAndWait();
             }
-            this.controller = controller.getController();
-            return controller.isOkClicked();
+            //this.controller = this.genresController.getController();
+            return this.genresController.isOkClicked();
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -182,7 +190,7 @@ public class View extends Application {
     public static void setClient(Socket client,Control controller){
         View.client=client;
         View.controller=controller;
-        View.trackList=View.controller.TrackList();
+         View.trackList=View.controller.TrackList();
         View.genreList=View.controller.GenreList();
         
         

@@ -9,6 +9,7 @@ import com.netcracker.education.controller.AlreadyExistsException;
 import com.netcracker.education.controller.Control;
 import com.netcracker.education.model.Genre;
 import com.netcracker.education.model.Track;
+import com.netcracker.education.net.SerialClient;
 import com.netcracker.education.view.View;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -87,6 +88,8 @@ public class GenresController {
         if (okClicked) {
             try {
                 this.controller.addGenre(tempGenre.getGenreName());
+                view.update();
+                view.updateG();
             } catch (AlreadyExistsException e) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.initOwner(view.getPrimaryStage());
@@ -109,6 +112,8 @@ public class GenresController {
     }
 
     public void setGenresLibrary() {
+        view.update();
+        view.updateG();
         this.genresLibrary = this.controller.GenreList();
         this.genreLibraryView.setItems(this.genresLibrary);
 
@@ -120,31 +125,36 @@ public class GenresController {
                 observable.addListener((obs, wasSelected, isNowSelected)
                         -> {
                             if (!isNowSelected) {
-                                track.delGenre(item);
+                                SerialClient.setMessage(7, null, item.getId(), track.getId());
+                                if (SerialClient.getMessage().getException() == null) {
+                                }
                                 System.out.println(genresOfTrack);
                             } else {
                                 if (isNowSelected) {
-                                    try {
-                                        track.addGenre(item);
-                                    } catch (AlreadyExistsException ex) {
-                                        Logger.getLogger(GenresController.class.getName()).log(Level.SEVERE, null, ex);
+                                    SerialClient.setMessage(8, null,  item.getId(), track.getId(),item.getGenreName());
+                                    if (SerialClient.getMessage().getException() == null) { 
                                     }
+                                    System.out.println(genresOfTrack);
                                 }
                             }
 
-                            System.out.println("Check box for " + item + " changed from " + wasSelected + " to " + isNowSelected);
+                            //System.out.println("Check box for " + item + " changed from " + wasSelected + " to " + isNowSelected);
                         }
                 );
                 return observable;
             }
         }));
+        //view.update();
     }
+
     public void setGenresEditLibrary() {
+        view.update();
+        view.updateG();
         this.genresLibrary = this.controller.GenreList();
         this.genreLibraryView.setItems(this.controller.GenreList());
         this.deleteGenreButton.setVisible(true);
         this.editGenreButton.setVisible(true);
-       this.genreLibraryView.setCellFactory(new Callback<ListView<Genre>, ListCell<Genre>>() {
+        this.genreLibraryView.setCellFactory(new Callback<ListView<Genre>, ListCell<Genre>>() {
 
             @Override
             public ListCell<Genre> call(ListView<Genre> param) {
@@ -163,6 +173,8 @@ public class GenresController {
                 return cell;
             }
         });
+        view.update();
+        view.updateG();
 
     }
 
@@ -187,18 +199,9 @@ public class GenresController {
     private void handleOkButton() {
 
         okClicked = true;
-
         dialogStage.close();
 
     }
-
-    /* @FXML
-     private void handleCancelButton() {
-     this.track = this.trackBefore;
-     dialogStage.close();
-        
-
-     }*/
     @FXML
     private void handleDeleteGenreButton() {
         if (this.genreLibraryView.getSelectionModel().isEmpty()) {
@@ -214,8 +217,16 @@ public class GenresController {
             if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
 
                 int genreId = this.genreLibraryView.getSelectionModel().getSelectedItem().getId();
-                this.controller.delGenre(this.controller.getGenreById(genreId).getGenreName());
-                this.setGenresEditLibrary();
+                SerialClient.setMessage(5, null, genreId, this.controller.getGenreById(genreId).getGenreName());
+                if (SerialClient.getMessage().getException() == null) {
+                    //view.update();
+                    this.setGenresEditLibrary();
+                } else {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initOwner(view.getPrimaryStage());
+                    alert.setContentText("SERVER ERROR");
+                    alert.showAndWait();
+                }
 
             }
             deleteGenreButton.setDisable(false);
@@ -223,6 +234,7 @@ public class GenresController {
             newGenreButton.setDisable(false);
 
         }
+        
 
     }
 
@@ -239,23 +251,24 @@ public class GenresController {
                 tempGenre.setGenreName(this.genreLibraryView.getSelectionModel().getSelectedItem().getGenreName());
                 boolean okClicked = view.showGenreEditDialog(tempGenre);
                 if (okClicked) {
-                    try {
-                        this.controller.editGenre(this.genreLibraryView.getSelectionModel().getSelectedItem().getId(), tempGenre);
+                    SerialClient.setMessage(6, null, this.genreLibraryView.getSelectionModel().getSelectedItem().getId(), tempGenre.getGenreName());
+                    if (SerialClient.getMessage().getException() == null) {
                         this.setGenresEditLibrary();
-                    } catch (AlreadyExistsException e) {
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.initOwner(view.getPrimaryStage());
-                        alert.setTitle("ERROR");
-                        alert.setHeaderText("This genre already exists");
-                        alert.setContentText("Please enter another genre.");
+                        alert.setContentText("Genre Already Exists");
                         alert.showAndWait();
                     }
+                    //view.update();
+                    //this.setGenresEditLibrary();
                 }
             } else {
             }
             deleteGenreButton.setDisable(false);
             editGenreButton.setDisable(false);
             newGenreButton.setDisable(false);
+            
         }
     }
 
@@ -264,10 +277,14 @@ public class GenresController {
         Genre tempGenre = new Genre();
         boolean okClicked = view.showGenreEditDialog(tempGenre);
         if (okClicked) {
-            try {
-                this.controller.addGenre(tempGenre.getGenreName());
-                if (!(track==null))this.setGenresLibrary();else this.setGenresEditLibrary();
-            } catch (AlreadyExistsException e) {
+            SerialClient.setMessage(4, null, tempGenre.getGenreName());
+            if (SerialClient.getMessage().getException() == null) {
+                if (!(track == null)) {
+                    this.setGenresLibrary();
+                } else {
+                    this.setGenresEditLibrary();
+                }
+            } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.initOwner(view.getPrimaryStage());
                 alert.setTitle("ERROR");
@@ -277,17 +294,21 @@ public class GenresController {
             }
 
         }
+        view.update();
+        view.updateG();
 
     }
 
     public void setGenresOfTrack(Track track) {
+        
         this.deleteGenreButton.setVisible(false);
         this.editGenreButton.setVisible(false);
         this.genresOfTrack = (ObservableList<Genre>) track.getGenreList();
         this.track = track;
         this.trackBefore = new Track(track.getId(), track.getSongName(), track.getArtist(), track.getAlbum(), track.getLength(), track.getGenreList());
+        view.update();
+        view.updateG();
 
     }
-    
 
 }

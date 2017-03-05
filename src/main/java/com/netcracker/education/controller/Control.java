@@ -15,7 +15,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Control implements Serializable{
+public class Control implements Serializable {
 
     private ObservableList<Track> trackList = FXCollections.observableArrayList(new ArrayList());
     private ObservableList<Genre> genreList = FXCollections.observableArrayList(new ArrayList());
@@ -106,10 +106,10 @@ public class Control implements Serializable{
     }
 
     public void delGenre(Genre genre) {
-        if (containsGenre(this.GenreList(),genre)) {
+        if (containsGenre(this.GenreList(), genre)) {
             this.genreList.remove(genre);
             for (Track track : this.trackList) {
-                if (containsGenre(track.getGenreListProperty(),genre)) {
+                if (containsGenre(track.getGenreListProperty(), genre)) {
                     track.delGenre(genre);
                 }
             }
@@ -118,23 +118,31 @@ public class Control implements Serializable{
 
     public void editGenre(int id, Genre genre) throws AlreadyExistsException {
         if (this.containsGenre(this.genreList, genre)) {
-            throw new AlreadyExistsException("Track already exists!");
+            throw new AlreadyExistsException("Genre already exists!");
         } else {
+            
             this.getGenreById(id).setGenreName(genre.getGenreName());
         }
     }
 
     public void delGenre(String genreS) {
         Genre genre = new Genre(genreS);
-        if (containsGenre(this.GenreList(),genre)) {
-           this.genreList.remove(genre);
+        if (containsGenre(this.GenreList(), genre)) {
             for (Track track : this.trackList) {
-                if (containsGenre(track.getGenreListProperty(),genre)) {
+                if (containsGenre(track.getGenreListProperty(), genre)) {
                     track.delGenre(genre);
-                    
-                    
+
                 }
             }
+            for (int i = 0; i < this.genreList.size(); i++) //for(Genre gen:this.genreList)
+            {
+                Genre gen = this.genreList.get(i);
+                if (gen.getGenreName().equals(genre.getGenreName())) {
+                    this.genreList.remove(i);
+                }
+            }
+            //this.genreList.remove(genre);
+            
         }
     }
 

@@ -85,7 +85,7 @@ public class SerialClient {
                     }
                     SerialClient.controller = new Control(SerialClient.trackList, SerialClient.genreList);
                 }
-                
+
                 View.setClient(client, SerialClient.controller);
                 break;
             }
@@ -117,8 +117,11 @@ public class SerialClient {
 
         }
         n = in.readInt();
+        SerialClient.genreList.clear();
         for (int i = 0; i < n; i++) {
-            Genre genre = new Genre((int) in.readInt(), (String) in.readUTF());
+            int idd = (int) in.readInt();
+            String genrN = (String) in.readObject();
+            Genre genre = new Genre(idd, genrN);
             SerialClient.genreList.add(genre);
         }
     }
