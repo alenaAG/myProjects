@@ -1,7 +1,0 @@
-3
-0
-pop
-2
-rocks
-3
-rock

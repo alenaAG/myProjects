@@ -94,6 +94,7 @@ public class SerialClient {
 
     public static void readLibs(ObjectInputStream in) throws IOException, ClassNotFoundException {
         SerialClient.trackList.clear();
+        
         int n = in.readInt();
         for (int i = 0; i < n; i++) {
             int id = in.readInt();

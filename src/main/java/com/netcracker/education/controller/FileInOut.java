@@ -28,13 +28,13 @@ public class FileInOut {
         String s = "";
         Writer buildingOut = new BufferedWriter(out);
         s += list.size();
-        s+="\n";
+        s += "\n";
         for (int i = 0; i < list.size(); i++) {
             s += list.get(i).toString();
 
         }
         buildingOut.append(s);
-       buildingOut.close();
+        buildingOut.close();
     }
 
     public static void writeGenreLibrary(List<Genre> list, Writer out) throws IOException {
@@ -42,10 +42,10 @@ public class FileInOut {
         Writer buildingOut = new BufferedWriter(out);
         s += list.size();
         for (int i = 0; i < list.size(); i++) {
-            s+="\n";
+            s += "\n";
             s += list.get(i).getId();
             s += "\n";
-            s+=list.get(i).getGenreName();
+            s += list.get(i).getGenreName();
 
         }
         buildingOut.append(s);
@@ -53,34 +53,40 @@ public class FileInOut {
     }
 
     public static List<Track> readTrackLibrary(Reader in) throws IOException {
+
         List<Track> list = new ArrayList<>();
         Track track = new Track();
         Scanner listIn = new Scanner(in);
-        listIn.useDelimiter("\n");
-        int n = listIn.nextInt();
-        int k = 0;
-        int id = -1;
-        int genreId = -1;
-        String genreName = "";
-        String songName = "";
-        String artist = "";
-        String album = "";
-        Duration duration = ZERO;
-        for (int i = 0; i < n; i++) {
-            List<Genre> genreList = new ArrayList<>();
-            id = listIn.nextInt();
-            songName = (String) listIn.next();
-            artist = (String) listIn.next();
-            album = (String) listIn.next();
-            try{duration = Duration.parse(listIn.next());}
-            catch(Exception e){}
-            k = (int) listIn.nextInt();
-            for (int j = 0; j < k; j++) {
-               genreId = (int) listIn.nextInt();
-                genreName = (String) listIn.next();
-                genreList.add(new Genre(genreId, genreName));
+        if (listIn.hasNextInt()) {
+            listIn.useDelimiter("\n");
+
+            int n = listIn.nextInt();
+            int k = 0;
+            int id = -1;
+            int genreId = -1;
+            String genreName = "";
+            String songName = "";
+            String artist = "";
+            String album = "";
+            Duration duration = ZERO;
+            for (int i = 0; i < n; i++) {
+                List<Genre> genreList = new ArrayList<>();
+                id = listIn.nextInt();
+                songName = (String) listIn.next();
+                artist = (String) listIn.next();
+                album = (String) listIn.next();
+                try {
+                    duration = Duration.parse(listIn.next());
+                } catch (Exception e) {
+                }
+                k = (int) listIn.nextInt();
+                for (int j = 0; j < k; j++) {
+                    genreId = (int) listIn.nextInt();
+                    genreName = (String) listIn.next();
+                    genreList.add(new Genre(genreId, genreName));
+                }
+                list.add(new Track(id, songName, artist, album, duration, genreList));
             }
-            list.add(new Track(id, songName, artist, album, duration, genreList));
         }
         listIn.close();
         return list;
@@ -88,17 +94,20 @@ public class FileInOut {
 
     public static List<Genre> readGenreLibrary(Reader in) throws IOException {
         List<Genre> list = new ArrayList<>();
-        Scanner listIn=new Scanner(in);
+        Scanner listIn = new Scanner(in);
         listIn.useDelimiter("\n");
-        int n = 0;
-        n = (int) listIn.nextInt();
-        int genreId = -1;
-        String genreName = "";
-        for (int j = 0; j < n; j++) {
-            genreId = (int) listIn.nextInt();
-            genreName = (String) listIn.next();
-            list.add(new Genre(genreId, genreName));
+        if (listIn.hasNextInt()) {
+            int n = 0;
+            n = (int) listIn.nextInt();
+            int genreId = -1;
+            String genreName = "";
+            for (int j = 0; j < n; j++) {
+                genreId = (int) listIn.nextInt();
+                genreName = (String) listIn.next();
+                list.add(new Genre(genreId, genreName));
+            }
         }
+
         listIn.close();
         return list;
     }
