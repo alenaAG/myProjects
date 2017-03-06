@@ -69,14 +69,6 @@ public class View extends Application {
             public void handle(WindowEvent we) {
                 System.out.println("Stage is closing");
                 SerialClient.setMessage(-1, null, 1);
-                /*try (Writer out = new FileWriter("TrackLib.txt")) {
-                    FileInOut.writeLibrary(viewController.getTrackLib(), out);
-                } catch (IOException e) {
-                }
-                try (Writer out = new FileWriter("GenreLib.txt")) {
-                    FileInOut.writeGenreLibrary(viewController.getGenreLib(), out);
-                } catch (IOException e) {
-                }*/
                 
             }
         });

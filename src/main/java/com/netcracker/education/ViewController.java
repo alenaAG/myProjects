@@ -81,14 +81,19 @@ public class ViewController {
     private Button cancelButton;
     @FXML
     private TitledPane genresTitledPane;
+    @FXML
+    private TextField searchField;
 
+    private ObservableList<Track> res = FXCollections.observableArrayList(new ArrayList<Track>());
     private boolean addIsClicked = false;
     private boolean editIsClicked = false;
     private boolean okIsClicked = false;
     private Control controller;
+    private int count = 0;
 
     @FXML
     private void handleCancelButton() {
+        searchField.setEditable(true);
         songNameField.setEditable(false);
         artistField.setEditable(false);
         albumField.setEditable(false);
@@ -155,6 +160,7 @@ public class ViewController {
         lengthField.setEditable(true);
         okButton.setVisible(true);
         this.genresTitledPane.setVisible(false);
+        searchField.setEditable(false);
     }
 
     @FXML
@@ -170,7 +176,7 @@ public class ViewController {
                 if (SerialClient.getMessage().getException() == null) {
                     view.update();
                     this.genreListView.setItems(FXCollections.observableArrayList(new ArrayList<Genre>()));
-                    
+
                 } else {
 
                     Alert alert = new Alert(AlertType.ERROR);
@@ -212,6 +218,7 @@ public class ViewController {
             addIsClicked = false;
             okIsClicked = false;
             cancelButton.setVisible(false);
+            searchField.setEditable(true);
 
             this.genresTitledPane.setVisible(true);
             if (errorMessage.length() != 0) {
@@ -235,6 +242,7 @@ public class ViewController {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
             editIsClicked = true;
+            searchField.setEditable(false);
 
             this.genresTitledPane.setVisible(false);
 
@@ -246,6 +254,7 @@ public class ViewController {
                 lengthField.setEditable(true);
                 okButton.setVisible(true);
                 cancelButton.setVisible(true);
+                searchField.setEditable(false);
             } else {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.initOwner(view.getPrimaryStage());
@@ -301,15 +310,60 @@ public class ViewController {
         lengthColumn.setCellValueFactory(cellData -> cellData.getValue().getLengthStringProperty());
 
         trackListTable.getSelectionModel().selectedItemProperty().addListener((observale, oldValue, newValue) -> showTrackDetails(newValue));
+        searchField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                res = search(newValue);
+                count++;
+                if ((newValue.length() == 0) || (newValue.equals("*"))) {
+                    res = controller.TrackList();
+                    trackListTable.setItems(res);
+                    showTrackDetails(null);
+                } else {
+                    if (res.size() == 0) {
+                        trackListTable.setItems(FXCollections.observableArrayList(new ArrayList<Track>()));
+                        showTrackDetails(null);
+                    } else {
+                        trackListTable.setItems(res);
+                       showTrackDetails(null);
+                    }
+                }
+
+            }
+        });
 
     }
 
+    public ObservableList<Track> search(String value) {
+        ObservableList<Track> res = FXCollections.observableArrayList(new ArrayList<Track>());
+        for (Track track : this.controller.TrackList()) {
+            if ((track.getSongName().contains(value)) || (track.getArtist().contains(value)) || (track.getAlbum().contains(value))) {
+                res.add(track);
+            }
+        }
+        return res;
+    }
+
     public void setView(View view) {
+
         this.view = view;
         this.controller = view.Controller();
-        trackListTable.setItems(this.controller.TrackList());
-      //  showTrackDetails(null);
-      //  genreListView.getItems().clear();
+        if (count == 0) {
+            this.trackListTable.setItems(this.controller.TrackList());
+            
+        } else {
+            
+            for(Track track :this.res)
+            {
+                Track track2=this.controller.getTrackById(track.getId());
+                track.setSongName(track2.getSongName());
+                track.setAlbum(track2.getArtist());
+                track.setAlbum(track2.getAlbum());
+                track.setLength(track2.getLength());
+                track.setGenreList(track2.getGenreList());
+            }
+            this.trackListTable.setItems(this.res);
+        }
     }
 
     public ObservableList<Track> getTrackLib() {
@@ -379,6 +433,7 @@ public class ViewController {
             artistField.setText("");
             albumField.setText("");
             lengthField.setText("");
+            genreListView.setItems(FXCollections.observableArrayList(new ArrayList<Genre>()));
 
         }
     }
