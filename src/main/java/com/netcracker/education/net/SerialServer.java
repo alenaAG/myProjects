@@ -42,6 +42,17 @@ public class SerialServer {
     private static ObservableList<Track> trackList = FXCollections.observableArrayList();
     private static ObservableList<Genre> genreList = FXCollections.observableArrayList();
 
+    public static void saveLibs() {
+        try (Writer output = new FileWriter("TrackLib.txt")) {
+            FileInOut.writeLibrary(SerialServer.controller.TrackList(), output);
+        } catch (IOException e) {
+        }
+        try (Writer output = new FileWriter("GenreLib.txt")) {
+            FileInOut.writeGenreLibrary(SerialServer.controller.GenreList(), output);
+        } catch (IOException e) {
+        }
+    }
+
     public static void main(String[] args) throws IOException {
 
         ServerSocket serverSockets = null;
@@ -80,7 +91,6 @@ public class SerialServer {
     }
 
     private static void sendLibs(ObjectOutputStream out) throws IOException {
-        
 
         out.writeInt(controller.TrackList().size());
         for (int i = 0; i < controller.TrackList().size(); i++) {
@@ -92,7 +102,7 @@ public class SerialServer {
             out.writeInt(controller.TrackList().get(i).getGenreList().size());
             for (int j = 0; j < controller.TrackList().get(i).getGenreList().size(); j++) {
                 out.writeInt(controller.TrackList().get(i).getGenreList().get(j).getId());
-               //  out.writeObject(controller.TrackList().get(i).getGenreList().get(j).getGenreName());
+                //  out.writeObject(controller.TrackList().get(i).getGenreList().get(j).getGenreName());
                 out.writeObject(controller.getGenreById(controller.TrackList().get(i).getGenreList().get(j).getId()).getGenreName());
             }
         }
@@ -144,6 +154,7 @@ public class SerialServer {
                             out.writeObject(message);
                             out.flush();
                             SerialServer.sendLibs(out);
+                            SerialServer.saveLibs();
 
                         } catch (Exception ex) {
                             message.setException(ex);
@@ -161,6 +172,7 @@ public class SerialServer {
                             out.writeObject(message);
                             out.flush();
                             SerialServer.sendLibs(out);
+                            SerialServer.saveLibs();
                         } catch (AlreadyExistsException ex) {
                             message.setException(ex);
                             out.writeObject(message);
@@ -177,6 +189,7 @@ public class SerialServer {
                             out.writeObject(message);
                             out.flush();
                             SerialServer.sendLibs(out);
+                            SerialServer.saveLibs();
                         } catch (AlreadyExistsException ex) {
                             message.setException(ex);
                             out.writeObject(message);
@@ -193,6 +206,7 @@ public class SerialServer {
                             out.writeObject(message);
                             out.flush();
                             SerialServer.sendLibs(out);
+                            SerialServer.saveLibs();
                         } catch (AlreadyExistsException ex) {
                             message.setException(ex);
                             out.writeObject(message);
@@ -209,6 +223,7 @@ public class SerialServer {
                             out.writeObject(message);
                             out.flush();
                             SerialServer.sendLibs(out);
+                            SerialServer.saveLibs();
                         } catch (Exception ex) {
                             message.setException(ex);
                             out.writeObject(message);
@@ -225,6 +240,7 @@ public class SerialServer {
                             out.writeObject(message);
                             out.flush();
                             SerialServer.sendLibs(out);
+                            SerialServer.saveLibs();
                         } catch (Exception ex) {
                             message.setException(ex);
                             out.writeObject(message);
@@ -235,33 +251,36 @@ public class SerialServer {
                 case 7:
                     args = message.getArgs();
                     try {
-                            SerialServer.delGenreFromTrack((int) args[0], (int) args[1]);
-                            message.setException(null);
-                            out.writeObject(message);
-                            out.flush();
-                            SerialServer.sendLibs(out);
-                        } catch (Exception ex) {
-                            message.setException(ex);
-                            out.writeObject(message);
-                            Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        SerialServer.delGenreFromTrack((int) args[0], (int) args[1]);
+                        message.setException(null);
+                        out.writeObject(message);
+                        out.flush();
+                        SerialServer.sendLibs(out);
+                        SerialServer.saveLibs();
+                    } catch (Exception ex) {
+                        message.setException(ex);
+                        out.writeObject(message);
+                        Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     break;
                 case 8:
                     args = message.getArgs();
                     try {
-                            SerialServer.addGenreToTrack((int) args[0], (int) args[1]);
-                            message.setException(null);
-                            out.writeObject(message);
-                            out.flush();
-                            SerialServer.sendLibs(out);
-                        } catch (Exception ex) {
-                            message.setException(ex);
-                            out.writeObject(message);
-                            Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        SerialServer.addGenreToTrack((int) args[0], (int) args[1]);
+                        message.setException(null);
+                        out.writeObject(message);
+                        out.flush();
+                        SerialServer.sendLibs(out);
+                        SerialServer.saveLibs();
+                    } catch (Exception ex) {
+                        message.setException(ex);
+                        out.writeObject(message);
+                        Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     break;
                 case -1:
                     System.out.println("Client is off");
+                    SerialServer.saveLibs();
                     b = -1;
                     break;
                 default:
@@ -308,22 +327,22 @@ public class SerialServer {
         if (SerialServer.controller.getGenreById(id) == null) {
             throw new Exception();
         } else {
-        SerialServer.controller.editGenre(id, new Genre(genreName));
+            SerialServer.controller.editGenre(id, new Genre(genreName));
         }
     }
-    public static void delGenreFromTrack(int genreId, int trackId) throws Exception
-    {
-        if ((SerialServer.controller.getGenreById(genreId) == null)||(SerialServer.controller.getTrackById(trackId)==null)) {
+
+    public static void delGenreFromTrack(int genreId, int trackId) throws Exception {
+        if ((SerialServer.controller.getGenreById(genreId) == null) || (SerialServer.controller.getTrackById(trackId) == null)) {
             throw new Exception();
-        } 
-        
+        }
+
         SerialServer.controller.getTrackById(trackId).delGenre(SerialServer.controller.getGenreById(genreId));
     }
-    public static void addGenreToTrack(int genreId, int trackId) throws Exception
-    {
-        if ((SerialServer.controller.getGenreById(genreId) == null)||(SerialServer.controller.getTrackById(trackId)==null)) {
+
+    public static void addGenreToTrack(int genreId, int trackId) throws Exception {
+        if ((SerialServer.controller.getGenreById(genreId) == null) || (SerialServer.controller.getTrackById(trackId) == null)) {
             throw new Exception();
-        }         
+        }
         SerialServer.controller.getTrackById(trackId).addGenre(SerialServer.controller.getGenreById(genreId));
     }
 
