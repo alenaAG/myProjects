@@ -127,10 +127,12 @@ public class ViewController {
                     view.update();
                     this.genreListView.getItems().clear();
                 } else {
+                    view.update();
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.initOwner(view.getPrimaryStage());
-                    alert.setTitle("Server error");
+                    alert.setContentText("Server doesn't have this track");
                     alert.showAndWait();
+
                 }
             } else {
                 Alert alert = new Alert(AlertType.WARNING);
@@ -162,6 +164,11 @@ public class ViewController {
         this.genresTitledPane.setVisible(false);
         searchField.setEditable(false);
     }
+    @FXML
+    private void handleUpdateButton(){
+       SerialClient.setMessage(9, null, count);
+       view.update();
+    }
 
     @FXML
     private void handleOkButton() {
@@ -179,10 +186,12 @@ public class ViewController {
 
                 } else {
 
+                    view.update();
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.initOwner(view.getPrimaryStage());
                     alert.setContentText("Track Already Exists");
                     alert.showAndWait();
+
                 }
 
             } else {
@@ -197,10 +206,21 @@ public class ViewController {
                             view.update();
                             showTrackDetails(this.controller.getTrackById(id));
                         } else {
-                            Alert alert = new Alert(AlertType.ERROR);
-                            alert.initOwner(view.getPrimaryStage());
-                            alert.setContentText("Track Already Exists");
-                            alert.showAndWait();
+                            if (SerialClient.getMessage().getException() instanceof AlreadyExistsException) {
+                                 view.update();
+                                Alert alert = new Alert(AlertType.ERROR);
+                                alert.initOwner(view.getPrimaryStage());
+                                alert.setContentText("Track Already Exists");
+                                alert.showAndWait();
+                               
+                            } else {
+                                view.update();
+                                Alert alert = new Alert(AlertType.ERROR);
+                                alert.initOwner(view.getPrimaryStage());
+                                alert.setContentText("Server doesn't have this track anymore");
+                                alert.showAndWait();
+                                
+                            }
                         }
                     }
 
@@ -325,7 +345,7 @@ public class ViewController {
                         showTrackDetails(null);
                     } else {
                         trackListTable.setItems(res);
-                       showTrackDetails(null);
+                        showTrackDetails(null);
                     }
                 }
 
@@ -350,12 +370,11 @@ public class ViewController {
         this.controller = view.Controller();
         if (count == 0) {
             this.trackListTable.setItems(this.controller.TrackList());
-            
+
         } else {
-            
-            for(Track track :this.res)
-            {
-                Track track2=this.controller.getTrackById(track.getId());
+
+            for (Track track : this.res) {
+                Track track2 = this.controller.getTrackById(track.getId());
                 track.setSongName(track2.getSongName());
                 track.setAlbum(track2.getArtist());
                 track.setAlbum(track2.getAlbum());

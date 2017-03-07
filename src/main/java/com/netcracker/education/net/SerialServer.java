@@ -159,6 +159,8 @@ public class SerialServer {
                         } catch (Exception ex) {
                             message.setException(ex);
                             out.writeObject(message);
+                            out.flush();
+                            SerialServer.sendLibs(out);
                             Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -176,6 +178,8 @@ public class SerialServer {
                         } catch (AlreadyExistsException ex) {
                             message.setException(ex);
                             out.writeObject(message);
+                            out.flush();
+                            SerialServer.sendLibs(out);
                             Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -193,6 +197,15 @@ public class SerialServer {
                         } catch (AlreadyExistsException ex) {
                             message.setException(ex);
                             out.writeObject(message);
+                            out.flush();
+                            SerialServer.sendLibs(out);
+                            Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (Exception ex) {
+                            out.flush();
+                            message.setException(ex);
+                            out.writeObject(message);
+                            out.flush();
+                            SerialServer.sendLibs(out);
                             Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -210,6 +223,8 @@ public class SerialServer {
                         } catch (AlreadyExistsException ex) {
                             message.setException(ex);
                             out.writeObject(message);
+                            out.flush();
+                            SerialServer.sendLibs(out);
                             Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -227,6 +242,8 @@ public class SerialServer {
                         } catch (Exception ex) {
                             message.setException(ex);
                             out.writeObject(message);
+                            out.flush();
+                            SerialServer.sendLibs(out);
                             Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -244,6 +261,8 @@ public class SerialServer {
                         } catch (Exception ex) {
                             message.setException(ex);
                             out.writeObject(message);
+                            out.flush();
+                            SerialServer.sendLibs(out);
                             Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -260,6 +279,8 @@ public class SerialServer {
                     } catch (Exception ex) {
                         message.setException(ex);
                         out.writeObject(message);
+                        out.flush();
+                        SerialServer.sendLibs(out);
                         Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
@@ -275,9 +296,21 @@ public class SerialServer {
                     } catch (Exception ex) {
                         message.setException(ex);
                         out.writeObject(message);
+                        out.flush();
+                        SerialServer.sendLibs(out);
                         Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
+                    
+                case 9:
+                    args = message.getArgs();
+                    message.setException(null);
+                    out.writeObject(message);
+                    out.flush();
+                    SerialServer.sendLibs(out);
+                    SerialServer.saveLibs();
+                    break;
+
                 case -1:
                     System.out.println("Client is off");
                     SerialServer.saveLibs();
@@ -306,8 +339,12 @@ public class SerialServer {
         SerialServer.controller.addTrack(songName, artist, album, duration);
     }
 
-    public static void editTrack(int id, String songName, String artist, String album, Duration duration) throws AlreadyExistsException {
-        SerialServer.controller.editTrack(id, songName, artist, album, duration);
+    public static void editTrack(int id, String songName, String artist, String album, Duration duration) throws AlreadyExistsException, Exception {
+        if (SerialServer.controller.getTrackById(id) == null) {
+            throw new Exception();
+        } else {
+            SerialServer.controller.editTrack(id, songName, artist, album, duration);
+        }
 
     }
 

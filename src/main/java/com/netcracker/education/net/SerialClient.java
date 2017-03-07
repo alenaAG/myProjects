@@ -85,6 +85,15 @@ public class SerialClient {
                     }
                     SerialClient.controller = new Control(SerialClient.trackList, SerialClient.genreList);
                 }
+                else { try {
+                    SerialClient.readLibs(in);
+                    } catch (IOException ex) {
+                        Logger.getLogger(SerialClient.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(SerialClient.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                SerialClient.controller = new Control(SerialClient.trackList, SerialClient.genreList);
+}
 
                 View.setClient(client, SerialClient.controller);
                 break;

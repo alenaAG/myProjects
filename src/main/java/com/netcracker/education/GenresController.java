@@ -91,6 +91,8 @@ public class GenresController {
                 view.update();
                 view.updateG();
             } catch (AlreadyExistsException e) {
+                view.update();
+                view.updateG();
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.initOwner(view.getPrimaryStage());
                 alert.setTitle("ERROR");
@@ -111,6 +113,18 @@ public class GenresController {
 
     }
 
+    @FXML
+    private void handleUpdateButton() {
+        SerialClient.setMessage(9, null, okClicked);
+        view.updateG();
+        view.update();
+        if (!(track == null)) {
+            this.setGenresLibrary();
+        } else {
+            this.setGenresEditLibrary();
+        }
+    }
+
     public void setGenresLibrary() {
         view.update();
         view.updateG();
@@ -127,14 +141,31 @@ public class GenresController {
                             if (!isNowSelected) {
                                 SerialClient.setMessage(7, null, item.getId(), track.getId());
                                 if (SerialClient.getMessage().getException() == null) {
+
+                                } else {
+                                    view.update();
+                                    view.updateG();
+                                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                                    alert.initOwner(view.getPrimaryStage());
+                                    alert.setTitle("ERROR");
+                                    alert.setContentText("This genre doesn't exist anymore");
+                                    alert.showAndWait();
                                 }
                                 System.out.println(genresOfTrack);
                             } else {
                                 if (isNowSelected) {
-                                    SerialClient.setMessage(8, null,  item.getId(), track.getId(),item.getGenreName());
-                                    if (SerialClient.getMessage().getException() == null) { 
+                                    SerialClient.setMessage(8, null, item.getId(), track.getId(), item.getGenreName());
+                                    if (SerialClient.getMessage().getException() == null) {
                                     }
                                     System.out.println(genresOfTrack);
+                                } else {
+                                    view.update();
+                                    view.updateG();
+                                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                                    alert.initOwner(view.getPrimaryStage());
+                                    alert.setTitle("ERROR");
+                                    alert.setContentText("This genre doesn't exist anymore");
+                                    alert.showAndWait();
                                 }
                             }
 
@@ -144,7 +175,8 @@ public class GenresController {
                 return observable;
             }
         }));
-        //view.update();
+        view.update();
+        view.updateG();
     }
 
     public void setGenresEditLibrary() {
@@ -202,6 +234,7 @@ public class GenresController {
         dialogStage.close();
 
     }
+
     @FXML
     private void handleDeleteGenreButton() {
         if (this.genreLibraryView.getSelectionModel().isEmpty()) {
@@ -222,9 +255,13 @@ public class GenresController {
                     //view.update();
                     this.setGenresEditLibrary();
                 } else {
-                    alert = new Alert(Alert.AlertType.ERROR);
+                    view.update();
+                    view.updateG();
+                    this.setGenresEditLibrary();
+                    alert = new Alert(Alert.AlertType.WARNING);
                     alert.initOwner(view.getPrimaryStage());
-                    alert.setContentText("SERVER ERROR");
+                    alert.setTitle("ERROR");
+                    alert.setContentText("This genre doesn't exist anymore");
                     alert.showAndWait();
                 }
 
@@ -234,7 +271,6 @@ public class GenresController {
             newGenreButton.setDisable(false);
 
         }
-        
 
     }
 
@@ -255,10 +291,27 @@ public class GenresController {
                     if (SerialClient.getMessage().getException() == null) {
                         this.setGenresEditLibrary();
                     } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.initOwner(view.getPrimaryStage());
-                        alert.setContentText("Genre Already Exists");
-                        alert.showAndWait();
+                        if (SerialClient.getMessage().getException() instanceof AlreadyExistsException) {
+
+                            view.update();
+                            view.updateG();
+                            this.setGenresEditLibrary();
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.initOwner(view.getPrimaryStage());
+                            alert.setContentText("Genre Already Exists");
+                            alert.showAndWait();
+                            view.update();
+                        } else {
+
+                            view.update();
+                            view.updateG();
+                            this.setGenresEditLibrary();
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.initOwner(view.getPrimaryStage());
+                            alert.setContentText("Server doesn't have this genre anymore");
+                            alert.showAndWait();
+                            view.update();
+                        }
                     }
                     //view.update();
                     //this.setGenresEditLibrary();
@@ -268,7 +321,7 @@ public class GenresController {
             deleteGenreButton.setDisable(false);
             editGenreButton.setDisable(false);
             newGenreButton.setDisable(false);
-            
+
         }
     }
 
@@ -285,6 +338,13 @@ public class GenresController {
                     this.setGenresEditLibrary();
                 }
             } else {
+                view.updateG();
+                view.update();
+                if (!(track == null)) {
+                    this.setGenresLibrary();
+                } else {
+                    this.setGenresEditLibrary();
+                }
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.initOwner(view.getPrimaryStage());
                 alert.setTitle("ERROR");
@@ -300,7 +360,7 @@ public class GenresController {
     }
 
     public void setGenresOfTrack(Track track) {
-        
+
         this.deleteGenreButton.setVisible(false);
         this.editGenreButton.setVisible(false);
         this.genresOfTrack = (ObservableList<Genre>) track.getGenreList();
