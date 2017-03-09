@@ -118,7 +118,9 @@ public class GenresController {
         SerialClient.setMessage(9, null, okClicked);
         view.updateG();
         view.update();
-        if (!(track == null)) {
+        if (!(this.track == null)) {
+            this.track=this.controller.getTrackById(track.getId());
+            this.genresOfTrack=track.getGenreListProperty();
             this.setGenresLibrary();
         } else {
             this.setGenresEditLibrary();

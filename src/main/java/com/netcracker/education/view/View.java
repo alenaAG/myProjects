@@ -157,7 +157,7 @@ public class View extends Application {
            this.genresController.setViev(this);
             if (track == null) {
                 this.genresController.setGenresEditLibrary();
-                this.update();
+                //this.update();
                 dialogStage.showAndWait();
             } else {
                 this.genresController.setGenresOfTrack(track);
