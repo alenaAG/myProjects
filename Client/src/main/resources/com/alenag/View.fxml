@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.alenag.client.ViewController">
+   <children>
+      <SplitPane dividerPositions="0.7192982456140351" layoutX="99.0" layoutY="93.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="476.0">
+               <children>
+                  <TableView fx:id="trackListTable" prefHeight="598.0" prefWidth="570.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn fx:id="songNameColumn" prefWidth="108.0" text="Song" />
+                      <TableColumn fx:id="artistColumn" prefWidth="84.0" text="Artist" />
+                        <TableColumn fx:id="albumColumn" prefWidth="115.0" text="Album" />
+                        <TableColumn fx:id="lengthColumn" prefWidth="77.0" text="Length" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+            </AnchorPane>
+          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="316.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="48.0" prefHeight="27.0" prefWidth="191.0" text="Song" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Label layoutX="15.0" layoutY="102.0" prefHeight="27.0" prefWidth="191.0" text="Artist" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
+                  <Label layoutX="15.0" layoutY="156.0" prefHeight="27.0" prefWidth="191.0" text="Album" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" />
+                  <Label layoutX="14.0" layoutY="210.0" prefHeight="27.0" prefWidth="191.0" text="Length" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Accordion layoutX="10.0" layoutY="264.0" />
+                <TitledPane id="genresTitledPane" fx:id="genresTitledPane" animated="false" layoutX="10.0" layoutY="276.0" prefHeight="238.0" prefWidth="202.0" text="Genres" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="8.0">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="220.0" prefWidth="200.0">
+                           <children>
+                              <ListView fx:id="genreListView" prefHeight="207.0" prefWidth="202.0" />
+                              <Button fx:id="addGenreButton" layoutX="217.0" layoutY="155.0" mnemonicParsing="false" onAction="#handleAddGenreButton" prefHeight="31.0" prefWidth="63.0" text="Edit" />
+                           </children></AnchorPane>
+                  </content>
+                </TitledPane>
+                  <HBox layoutX="15.0" layoutY="553.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0">
+                     <children>
+                        <Button fx:id="addButton" layoutX="15.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleAddTrack" prefHeight="31.0" prefWidth="65.0" text="Add" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
+                        <Button fx:id="editButton" layoutX="80.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleEditTrack" prefHeight="31.0" prefWidth="65.0" text="Edit" AnchorPane.bottomAnchor="14.0" />
+                        <Button fx:id="deleteButton" layoutX="145.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleDeleteTrack" text="Delete" AnchorPane.bottomAnchor="14.0" />
+                     </children>
+                  </HBox>
+                  <TextField fx:id="songNameField" editable="false" layoutX="16.0" layoutY="75.0" />
+                  <TextField fx:id="artistField" editable="false" layoutX="17.0" layoutY="129.0" />
+                  <TextField fx:id="albumField" editable="false" layoutX="17.0" layoutY="183.0" />
+                  <TextField fx:id="lengthField" editable="false" layoutX="16.0" layoutY="237.0" />
+                  <Button fx:id="okButton" layoutX="15.0" layoutY="520.0" mnemonicParsing="false" onAction="#handleOkButton" text="OK" visible="false" AnchorPane.bottomAnchor="50.0" />
+                  <Button fx:id="cancelButton" layoutX="56.0" layoutY="520.0" mnemonicParsing="false" onAction="#handleCancelButton" text="CANCEL" visible="false" AnchorPane.bottomAnchor="50.0" />
+                  <TextField fx:id="searchField" layoutX="16.0" layoutY="14.0" promptText="Search...." AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="111.0" AnchorPane.topAnchor="14.0" />
+                  <Button layoutX="217.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleUpdateButton" prefHeight="31.0" prefWidth="84.0" text="Update" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
