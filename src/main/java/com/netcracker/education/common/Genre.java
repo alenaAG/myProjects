@@ -1,4 +1,4 @@
-package com.netcracker.education.model;
+package com.netcracker.education.common;
 
 import java.io.Serializable;
 import java.util.ArrayList;

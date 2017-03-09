@@ -1,21 +1,15 @@
-package com.netcracker.education.view;
+package com.netcracker.education.client;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import com.netcracker.education.AddGenreController;
-import com.netcracker.education.GenresController;
-import com.netcracker.education.RootLayoutController;
-import com.netcracker.education.ViewController;
-import com.netcracker.education.ViewController;
-import com.netcracker.education.controller.AlreadyExistsException;
-import com.netcracker.education.controller.Control;
-import com.netcracker.education.controller.FileInOut;
-import com.netcracker.education.model.Genre;
-import com.netcracker.education.model.Track;
-import com.netcracker.education.net.SerialClient;
+import com.netcracker.education.common.AlreadyExistsException;
+import com.netcracker.education.common.Control;
+import com.netcracker.education.server.FileInOut;
+import com.netcracker.education.common.Genre;
+import com.netcracker.education.common.Track;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;

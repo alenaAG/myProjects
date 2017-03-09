@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.netcracker.education.GenresController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.netcracker.education.client.GenresController">
    <children>
       <ScrollPane layoutX="14.0" layoutY="57.0" prefHeight="312.0" prefWidth="349.0">
          <content>
@@ -26,6 +26,6 @@
             <Button fx:id="okGenreButton" mnemonicParsing="false" onAction="#handleOkButton" text="OK" />
          </children>
       </HBox>
-      <Button layoutX="416.0" layoutY="338.0" mnemonicParsing="false" onAction="#handleUpdateButton" prefHeight="31.0" prefWidth="110.0" text="Update" />
+      <Button layoutX="380.0" layoutY="48.0" mnemonicParsing="false" onAction="#handleUpdateButton" prefHeight="31.0" prefWidth="84.0" text="Update" />
    </children>
 </AnchorPane>

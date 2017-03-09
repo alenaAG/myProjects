@@ -1,6 +1,7 @@
-package com.netcracker.education.model;
+package com.netcracker.education.common;
 
-import com.netcracker.education.controller.AlreadyExistsException;
+import com.netcracker.education.common.Genre;
+import com.netcracker.education.common.AlreadyExistsException;
 import java.io.Serializable;
 import java.time.Duration;
 import static java.time.Duration.*;

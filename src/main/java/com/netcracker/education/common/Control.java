@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.netcracker.education.controller;
+package com.netcracker.education.common;
 
-import com.netcracker.education.model.*;
-import com.netcracker.education.model.Track;
+import com.netcracker.education.common.AlreadyExistsException;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;

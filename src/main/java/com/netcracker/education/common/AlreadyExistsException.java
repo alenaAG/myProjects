@@ -1,5 +1,5 @@
 
-package com.netcracker.education.controller;
+package com.netcracker.education.common;
 
 public class AlreadyExistsException extends Exception {
 

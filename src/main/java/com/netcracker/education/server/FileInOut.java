@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.netcracker.education.controller;
+package com.netcracker.education.server;
 
-import com.netcracker.education.model.Genre;
-import com.netcracker.education.model.Track;
+import com.netcracker.education.common.Genre;
+import com.netcracker.education.common.Track;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Reader;

@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="225.0" prefWidth="218.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.netcracker.education.AddGenreController">
+<AnchorPane id="AnchorPane" prefHeight="225.0" prefWidth="218.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.netcracker.education.client.AddGenreController">
    <children>
       <Label layoutX="14.0" layoutY="54.0" prefHeight="36.0" prefWidth="113.0" text="Genre Name" />
       <TextField id="genreName" fx:id="genreNameField" layoutX="14.0" layoutY="90.0" />

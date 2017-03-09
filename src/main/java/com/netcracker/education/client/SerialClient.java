@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.netcracker.education.net;
+package com.netcracker.education.client;
 
-import com.netcracker.education.controller.AlreadyExistsException;
-import com.netcracker.education.controller.Control;
-import com.netcracker.education.controller.FileInOut;
-import com.netcracker.education.model.Genre;
-import com.netcracker.education.model.Message;
-import com.netcracker.education.model.Track;
-import com.netcracker.education.view.View;
+import com.netcracker.education.common.AlreadyExistsException;
+import com.netcracker.education.common.Control;
+import com.netcracker.education.server.FileInOut;
+import com.netcracker.education.common.Genre;
+import com.netcracker.education.common.Message;
+import com.netcracker.education.common.Track;
+import com.netcracker.education.client.View;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

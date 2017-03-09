@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.netcracker.education;
+package com.netcracker.education.client;
 
-import com.netcracker.education.controller.AlreadyExistsException;
-import com.netcracker.education.controller.Control;
-import com.netcracker.education.model.Genre;
-import com.netcracker.education.view.View;
-import com.netcracker.education.model.Track;
-import com.netcracker.education.net.SerialClient;
+import com.netcracker.education.common.AlreadyExistsException;
+import com.netcracker.education.common.Control;
+import com.netcracker.education.common.Genre;
+import com.netcracker.education.client.View;
+import com.netcracker.education.common.Track;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;

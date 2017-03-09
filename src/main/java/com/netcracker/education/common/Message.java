@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.netcracker.education.model;
+package com.netcracker.education.common;
 
 import java.io.Serializable;
 

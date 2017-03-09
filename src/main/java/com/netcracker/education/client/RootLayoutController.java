@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.netcracker.education;
+package com.netcracker.education.client;
 
-import com.netcracker.education.controller.Control;
-import com.netcracker.education.view.View;
+import com.netcracker.education.common.Control;
+import com.netcracker.education.client.View;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
