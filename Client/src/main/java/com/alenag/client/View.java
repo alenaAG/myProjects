@@ -62,7 +62,7 @@ public class View extends Application {
     public void initRootLayout() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(View.class.getResource("../RootLayout.fxml"));
+            loader.setLocation(View.class.getResource("/com/alenag/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
             Scene scene = new Scene(rootLayout);
             RootLayoutController controller = loader.getController();
@@ -87,7 +87,7 @@ public class View extends Application {
     public void showTrackLibrary() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(View.class.getResource("../View.fxml"));
+            loader.setLocation(View.class.getResource("/com/alenag/View.fxml"));
             AnchorPane trackLibrary;
             trackLibrary = (AnchorPane) loader.load();
             rootLayout.setCenter(trackLibrary);
@@ -103,7 +103,7 @@ public class View extends Application {
     public boolean showGenreEditDialog(Genre genre) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(View.class.getResource("../AddGenre.fxml"));
+            loader.setLocation(View.class.getResource("/com/alenag/AddGenre.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Edit Genre");
@@ -125,7 +125,7 @@ public class View extends Application {
     public boolean showGenresDialog(Track track) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(View.class.getResource("../Genres.fxml"));
+            loader.setLocation(View.class.getResource("/com/alenag/Genres.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Genres");
