@@ -17,4 +17,33 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+    <build>
+            <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.6.0</version>
+                        <configuration>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>3.0.2</version>
+                        <configuration>
+                            <!--useDefaultManifestFile>true</useDefaultManifestFile-->
+                            <archive>      
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                    <mainClass>com.alenag.client.SerialClient</mainClass>
+                                    <packageName>com.alenag.client</packageName>
+                                </manifest>
+                                <addMavenDescriptor>false</addMavenDescriptor>
+                            </archive>
+                        </configuration>
+                    </plugin> 
+            </plugins>
+    </build>     
 </project>
